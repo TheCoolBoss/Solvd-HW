@@ -1,3 +1,4 @@
+package com.hw2;
 public class LawyerRemote extends Lawyer
 {
     private String timeZone;

@@ -1,3 +1,4 @@
+package com.hw2;
 public class LawFirmPhysical extends LawFirm
 {
     private String location;

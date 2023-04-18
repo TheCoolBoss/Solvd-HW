@@ -1,3 +1,4 @@
+package com.hw2;
 public class Client 
 {
     private String firstName;

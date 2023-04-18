@@ -1,3 +1,4 @@
+package com.hw2;
 public class License 
 {
     //Not actually sure if there are different types, just added it for another field
