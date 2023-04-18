@@ -14,6 +14,8 @@ public class LawFirm
         this.name = name;
         this.lawyers = new ArrayList<Lawyer>();
         this.clients = new ArrayList<Client>();
+        this.secretaries = new ArrayList<Secretary>();
+        this.cases = new ArrayList<Case>();
     }
 
     public String getName()
