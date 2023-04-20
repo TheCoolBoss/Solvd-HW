@@ -20,20 +20,20 @@ public class Main
         License basicLicense = new License("Basic");
         License advancedLicense = new License("Advanced");
 
-        Secretary janeDoe = new Secretary("Jane", "Doe");
+        Secretary janeDoe = new Secretary("Jane", "Doe", 10, "5/4/32");
         janeDoe.addWork("Shred papers.");
 
-        Secretary janeDoe2 = new Secretary("Jane", "Doe");
+        Secretary janeDoe2 = new Secretary("Jane", "Doe", 10, "5/4/32");
 
-        Lawyer mattJohnson = new Lawyer("Matthew", "Johnson", basicPlan, basicLicense, janeDoe);
+        Lawyer mattJohnson = new Lawyer("Matthew", "Johnson", basicPlan, basicLicense, janeDoe, "4/20/23", 1);
         for (Case c : theLaw.getCases()) 
         {
             mattJohnson.getCases().add(c);
         }
-        Lawyer numberLawyer = new Lawyer("1", "2", moreHoursPlan, basicLicense, janeDoe);
-        Lawyer snake = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe);
-        Lawyer snakeCopy = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe);
-        LawyerRemote remoteLawyer = new LawyerRemote("The", "Remote Lawyer", basicPlan, advancedLicense, janeDoe);
+        Lawyer numberLawyer = new Lawyer("1", "2", moreHoursPlan, basicLicense, janeDoe, "4/4", 2);
+        Lawyer snake = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe, "1/1/11", 3);
+        Lawyer snakeCopy = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe, "1/1/11", 3);
+        LawyerRemote remoteLawyer = new LawyerRemote("The", "Remote Lawyer", basicPlan, advancedLicense, janeDoe, "1/2/34", 5);
 
 
 
@@ -69,6 +69,12 @@ public class Main
             System.out.println("There are 2 Jane Doe secretaries");
         }
 
+        printBreak();
         theLaw.listPlans(5);
     }    
+
+    public static void printBreak()
+    {
+        System.out.println("");
+    }
 }

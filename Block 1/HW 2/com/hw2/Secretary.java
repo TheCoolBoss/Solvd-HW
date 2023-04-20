@@ -5,10 +5,13 @@ public class Secretary extends Employee
 {
     private ArrayList<String> workList;  
 
-    public Secretary(String firstName, String lastName)
+    public Secretary(String firstName, String lastName, int id, String hireDate)
     {
         super(firstName, lastName);
         this.workList = new ArrayList<String>();
+        this.salary = 150.00;
+        this.id = id;
+        this.dateOfHire = hireDate;
     }
 
 
@@ -71,7 +74,11 @@ public class Secretary extends Employee
         Secretary temp = (Secretary) toCompare;
         
         //Not too concerned with work list for this assignment sscope
-        if (this.firstName == temp.firstName && this.lastName == temp.lastName)
+        if (this.firstName == temp.firstName 
+            && this.lastName == temp.lastName
+            && this.id == temp.id
+            && this.salary == temp.salary
+            && this.dateOfHire.equals(temp.dateOfHire))
         {
             return true;
         }

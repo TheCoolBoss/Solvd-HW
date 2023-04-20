@@ -3,9 +3,9 @@ public class LawyerRemote extends Lawyer
 {
     private String timeZone;
 
-    public LawyerRemote(String firstName, String lastName, Plan plan, License license, Secretary secretary)
+    public LawyerRemote(String firstName, String lastName, Plan plan, License license, Secretary secretary, String hireDate, int id)
     {
-        super(firstName, lastName, plan, license, secretary);
+        super(firstName, lastName, plan, license, secretary, hireDate, id);
     }
 
 

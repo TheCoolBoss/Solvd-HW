@@ -9,13 +9,16 @@ public class Lawyer extends Employee
     private Secretary secretary;
     private ArrayList<Case> cases;
 
-    public Lawyer(String firstName, String lastName, Plan plan, License license, Secretary secretary)
+    public Lawyer(String firstName, String lastName, Plan plan, License license, Secretary secretary, String hireDate, int id)
     {
         super(firstName, lastName);
         this.plan = plan;
         this.license = license;
         this.secretary = secretary;
         this.cases = new ArrayList<Case>();
+        this.dateOfHire = hireDate;
+        this.salary = 200.00;
+        this.id = id;
     }
 
     
@@ -95,8 +98,12 @@ public class Lawyer extends Employee
 
         Lawyer temp = (Lawyer) toCompare;
 
-        //For the purposes of this assignment, I don't think name is as important as license/plan
-        if (this.license.getType().equals(temp.license.getType()) && this.plan.toString().equals(temp.plan.toString()))
+        //For the purposes of this assignment, I don't think name and other fields are as important as license/plan
+        if (this.license.getType().equals(temp.license.getType()) 
+            && this.plan.toString().equals(temp.plan.toString())
+            && this.id == temp.id
+            && this.dateOfHire.equals(temp.dateOfHire)
+            && this.salary == temp.salary)
         {
             return true;
         }
@@ -110,7 +117,7 @@ public class Lawyer extends Employee
         base *= cases.size();
         return base;
     }
-    
+
     public void printWork()
     {
         String caseList = listCases();
