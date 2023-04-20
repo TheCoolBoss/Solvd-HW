@@ -1,52 +1,89 @@
 package com.hw2;
-public class Secretary 
+import java.util.ArrayList;
+
+public class Secretary extends Employee
 {
-    private String firstName;
-    private String lastName;
-    private Lawyer lawyer;    
+    private ArrayList<String> workList;  
 
-    public Secretary(String firstName, String lastName, Lawyer lawyer)
+    public Secretary(String firstName, String lastName)
     {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.lawyer = lawyer;
-    }
-
-    public Secretary(Lawyer lawyer)
-    {
-        this.firstName = "John";
-        this.lastName = "Doe";
-        this.lawyer = lawyer;
+        super(firstName, lastName);
+        this.workList = new ArrayList<String>();
     }
 
 
-    public String getFirstName()
+    public void addWork(String workInfo)
     {
-        return this.firstName;
+        this.workList.add(workInfo);
     }
 
-    public String getLastName()
+    public void removeWork(String workInfo)
     {
-        return this.lastName;
+        if (!this.workList.contains(workInfo))
+        {
+            System.out.println(workInfo + " is not in the specified work list.");
+        }
+        else
+        {
+            this.workList.remove(workInfo);
+        }
     }
 
-    public Lawyer getLawyer()
+    public ArrayList<String> getWorkList()
     {
-        return this.lawyer;
+        return this.workList;
     }
 
-    public void setFirstName(String newFirstName)
+    public void setWorkList(ArrayList<String> newList)
     {
-        this.firstName = newFirstName;
+        this.workList = newList;
     }
 
-    public void setLastName(String newLastName)
+    public String listAllWork()
     {
-        this.lastName = newLastName;
+        String ret = "";
+        for (String work : workList) 
+        {
+            ret = ret.concat(work.toString() + "\n");
+        }
+
+        return ret;
     }
 
-    public void setLawyer(Lawyer newLawyer)
+    public String toString()
     {
-        this.lawyer = newLawyer;
+        return "Secretary " + getFirstName() + " " + getLastName();
+    }
+
+    public void printWork()
+    {
+        System.out.println("List of work for secretary " + firstName + " " + lastName + ":");
+        System.out.println(listAllWork());
+    }
+
+    public boolean equals(Object toCompare)
+    {
+        if (toCompare.getClass() != this.getClass())
+        {   
+            return false;
+        }
+
+        Secretary temp = (Secretary) toCompare;
+        
+        //Not too concerned with work list for this assignment sscope
+        if (this.firstName == temp.firstName && this.lastName == temp.lastName)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public int hashCode()
+    {
+        int base = 1;
+        base += firstName.length();
+        base *= lastName.length();
+        return base;
     }
 }

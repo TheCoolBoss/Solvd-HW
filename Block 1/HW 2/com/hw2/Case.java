@@ -49,4 +49,21 @@ public class Case
     {
         this.isOpen = newStatus;
     }
+
+    public String toString()
+    {
+        String toRet = "Case " + title + " of date " + date + " is ";
+        String status = "";
+        if (isOpen)
+        {
+            status = "open";
+        }
+
+        else
+        {
+            status = "closed";
+        }
+
+        return toRet.concat(status);
+    }
 }

@@ -4,14 +4,14 @@ public class Main
     public static void main(String[] args)
     {
         LawFirm theLaw = new LawFirm("The Law");
-        LawFirmPhysical theLawPhysical = new LawFirmPhysical(theLaw.name, "USA");
-        LawFirmRemote theLawRemote = new LawFirmRemote(theLaw.name, "PST");
+        LawFirmPhysical theLawPhysical = new LawFirmPhysical(theLaw.getName(), "USA");
+        LawFirmRemote theLawRemote = new LawFirmRemote(theLaw.getName(), "PST", "thelaw.com");
 
         Case privateCase1 = new Case("4/16");
-        theLaw.cases.add(privateCase1);
+        theLaw.getCases().add(privateCase1);
 
         Client angryConsumer1 = new Client("Angry", "Consumer");
-        theLaw.clients.add(angryConsumer1);
+        theLaw.getClients().add(angryConsumer1);
 
         Plan basicPlan = new Plan(50.00, 10.00);
         Plan moreHoursPlan = new Plan(80.00, 7.00);
@@ -20,19 +20,55 @@ public class Main
         License basicLicense = new License("Basic");
         License advancedLicense = new License("Advanced");
 
-        Lawyer mattJohnson = new Lawyer("Matthew", "Johnson,", basicPlan, basicLicense);
-        Lawyer numberLawyer = new Lawyer("1", "2", moreHoursPlan, basicLicense);
-        Lawyer anonLawyer = new Lawyer(fewHoursPlan, advancedLicense);
-        LawyerRemote remoteLawyer = new LawyerRemote("The", "Remote Lawyer", basicPlan, advancedLicense);
+        Secretary janeDoe = new Secretary("Jane", "Doe");
+        janeDoe.addWork("Shred papers.");
 
-        Secretary janeDoe = new Secretary("Jane", "Doe", mattJohnson);
+        Secretary janeDoe2 = new Secretary("Jane", "Doe");
 
-        theLaw.lawyers.add(mattJohnson);
-        theLaw.lawyers.add(numberLawyer);
-        theLaw.lawyers.add(anonLawyer);
-        theLaw.lawyers.add(remoteLawyer);
-        theLaw.secretaries.add(janeDoe);
-        theLaw.cases.add(privateCase1);
-        theLaw.clients.add(angryConsumer1);
+        Lawyer mattJohnson = new Lawyer("Matthew", "Johnson", basicPlan, basicLicense, janeDoe);
+        for (Case c : theLaw.getCases()) 
+        {
+            mattJohnson.getCases().add(c);
+        }
+        Lawyer numberLawyer = new Lawyer("1", "2", moreHoursPlan, basicLicense, janeDoe);
+        Lawyer snake = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe);
+        Lawyer snakeCopy = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe);
+        LawyerRemote remoteLawyer = new LawyerRemote("The", "Remote Lawyer", basicPlan, advancedLicense, janeDoe);
+
+
+
+        theLaw.getLawyers().add(mattJohnson);
+        theLaw.getLawyers().add(numberLawyer);
+        theLaw.getLawyers().add(snake);
+        theLaw.getLawyers().add(snakeCopy);
+        theLaw.getLawyers().add(remoteLawyer);
+        theLaw.getSecretaries().add(janeDoe);
+
+        System.out.println(theLaw.toString());
+        mattJohnson.printWork();
+        janeDoe.toString();
+        janeDoe.printWork();
+
+        if (snake.equals(snakeCopy))
+        {
+            System.out.println("Two snakes.");
+        }
+
+        if (snake.equals(mattJohnson))
+        {
+            System.out.println("Snake is Matt Johnson");
+        }
+
+        else
+        {
+            System.out.println("Snake is not Matt Johnson.");
+        }
+
+        if (janeDoe.equals(janeDoe2))
+        {
+            System.out.println("There are 2 Jane Doe secretaries");
+        }
+
+        theLaw.listPlans(5);
     }    
 }

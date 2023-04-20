@@ -3,11 +3,11 @@ import java.util.ArrayList;
 
 public class LawFirm 
 {
-    public String name; 
-    public ArrayList<Lawyer> lawyers;
-    public ArrayList<Secretary> secretaries;
-    public ArrayList<Client> clients;
-    public ArrayList<Case> cases;
+    protected String name; 
+    protected ArrayList<Lawyer> lawyers;
+    protected ArrayList<Secretary> secretaries;
+    protected ArrayList<Client> clients;
+    protected ArrayList<Case> cases;
 
     public LawFirm(String name)
     {
@@ -23,11 +23,54 @@ public class LawFirm
         return this.name;
     }
 
+    public ArrayList<Lawyer> getLawyers()
+    {
+        return this.lawyers;
+    }
+
+    public ArrayList<Secretary> getSecretaries()
+    {
+        return this.secretaries;
+    }
+
+    public ArrayList<Client> getClients()
+    {
+        return this.clients;
+    }
+
+    public ArrayList<Case> getCases()
+    {
+        return this.cases;
+    }
+
     public void setName(String newName)
     {
         this.name = newName;
     }
     
+
+    public String getInfoAsList(String type, ArrayList list)
+    {
+        String toRet = type + ":\n";
+        for (Object item : list) 
+        {
+            toRet = toRet.concat(item.toString() + "\n");
+        }
+
+        return toRet;
+    }
+
+    public String toString()
+    {
+        String lawyerList = getInfoAsList("Lawyers", lawyers);
+        String secretaryList = getInfoAsList("Secretaries", secretaries);
+        return("Law firm " + this.name + ":\n"
+                + lawyerList
+                + "\n"
+                + secretaryList);
+    }
+
+
     public void areThereClients()
     {
         if (this.clients.size() > 0)
@@ -36,5 +79,17 @@ public class LawFirm
         }
     }
 
-    
+    public void listPlans(int hours)
+    {
+        System.out.println("The costs of a " + hours + " hour plan for all lawyers in " + name + " are:");
+        for (Lawyer lawyer: lawyers) 
+        {
+            double base = lawyer.getPlan().getBaseCost();
+            double hourRate = lawyer.getPlan().getHourRate();
+            System.out.println(lawyer.getFirstName() + " " + lawyer.getLastName() + ":");
+            System.out.println("Base rate of " + base + ", plus hourly rate of " + hourRate);
+            double total = (base + (hourRate * hours));
+            System.out.println("Total: " + total);
+        }
+    }    
 }
