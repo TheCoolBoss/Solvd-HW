@@ -2,7 +2,7 @@ package com.hw2;
 
 import java.util.ArrayList;
 
-public class Lawyer extends Employee
+public class Lawyer extends Employee implements CanBeFired
 {
     private Plan plan;
     private License license;
@@ -123,5 +123,16 @@ public class Lawyer extends Employee
         String caseList = listCases();
         System.out.println("List of cases for lawyer " + getFirstName() + " " + getLastName() + ":\n"
                             + caseList);
+    }
+
+    public void fire()
+    {
+        System.out.println("Lawyer " + firstName + " " + lastName + " has been fired!");
+        this.plan = null;
+        this.secretary = null;
+        this.salary = 0.0;
+        this.id = -1;
+        this.cases.clear();
+        this.license.revoke();
     }
 }

@@ -5,7 +5,7 @@ public class LawFirmPhysical extends LawFirm
 
     public LawFirmPhysical(String name, String location)
     {
-        super(name);
+        super(name.concat("(Physical)"));
         this.location = location;
     }
 

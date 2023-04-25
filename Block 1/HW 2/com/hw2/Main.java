@@ -1,14 +1,26 @@
 package com.hw2;
+
+import java.util.ArrayList;
+
 public class Main 
 {
     public static void main(String[] args)
     {
+        ArrayList<LawFirm> lawFirms = new ArrayList<LawFirm>();
         LawFirm theLaw = new LawFirm("The Law");
         LawFirmPhysical theLawPhysical = new LawFirmPhysical(theLaw.getName(), "USA");
         LawFirmRemote theLawRemote = new LawFirmRemote(theLaw.getName(), "PST", "thelaw.com");
+        lawFirms.add(theLaw);
+        lawFirms.add(theLawPhysical);
+        lawFirms.add(theLawRemote);
 
-        Case privateCase1 = new Case("4/16");
+        Case privateCase1 = new Case("Dummy Case", "4/16", "Test Plaintiff", "Test Defendant");
+        Case defamation1 = new CaseDefamation("Defamation 1", "4/22", "Plaintiff", "Defendant");
         theLaw.getCases().add(privateCase1);
+        theLaw.getCases().add(defamation1);
+
+        defamation1.close();
+        defamation1.reOpen();
 
         Client angryConsumer1 = new Client("Angry", "Consumer");
         theLaw.getClients().add(angryConsumer1);
@@ -30,6 +42,7 @@ public class Main
         {
             mattJohnson.getCases().add(c);
         }
+
         Lawyer numberLawyer = new Lawyer("1", "2", moreHoursPlan, basicLicense, janeDoe, "4/4", 2);
         Lawyer snake = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe, "1/1/11", 3);
         Lawyer snakeCopy = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe, "1/1/11", 3);
@@ -71,10 +84,40 @@ public class Main
 
         printBreak();
         theLaw.listPlans(5);
+        printBreak();
+        theLaw.getLawyers().remove(snakeCopy);
+        snakeCopy.fire();
+        printBreak();
+
+        theLaw.closeDown();
+        theLawPhysical.closeDown();
+        theLawRemote.closeDown();
+
+        clearLawFirms(lawFirms);
     }    
 
     public static void printBreak()
     {
         System.out.println("");
+    }
+
+    public static void clearLawFirms(ArrayList<LawFirm> firms)
+    {
+        //ConcurrentModificationException happens if removing is done during iteration
+        ArrayList<Integer> indicesToRemove = new ArrayList<Integer>();
+
+        for (LawFirm firm : firms) 
+        {
+            if (firm.getName().contains("closed"))
+            {
+                System.out.println("Removing law firm " + firm.getName());
+                indicesToRemove.add(firms.indexOf(firm));
+            }
+        }
+
+        for (Integer index : indicesToRemove)
+        {
+            firms.remove(index);
+        }
     }
 }

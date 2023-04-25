@@ -1,13 +1,19 @@
 package com.hw2;
 import java.util.ArrayList;
 
-public class LawFirm 
+public class LawFirm implements CanBeShutDown
 {
+    private static final String COUNTRY = "USA";
     protected String name; 
     protected ArrayList<Lawyer> lawyers;
     protected ArrayList<Secretary> secretaries;
     protected ArrayList<Client> clients;
     protected ArrayList<Case> cases;
+
+    static
+    {
+        System.out.println("Establishing new law firm in " + COUNTRY + ".");
+    }
 
     public LawFirm(String name)
     {
@@ -92,4 +98,24 @@ public class LawFirm
             System.out.println("Total: " + total);
         }
     }    
+
+    public void closeDown()
+    {
+        System.out.println("Law firm " + name + " is being shut down by the government.");
+
+        name = name.concat("(Now closed.)");
+        clients.clear();
+
+        for (Lawyer lawyer: lawyers) 
+        {
+            lawyer.fire();
+        }
+
+        for (Secretary secretary : secretaries)
+        {
+            secretary.fire();
+        }
+
+        cases.clear();
+    }
 }

@@ -6,7 +6,7 @@ public class LawFirmRemote extends LawFirm
 
     public LawFirmRemote(String name, String timeZone, String url)
     {
-        super(name);
+        super(name.concat("(Remote)"));
         this.timeZone = timeZone;
         this.url = url;
     }

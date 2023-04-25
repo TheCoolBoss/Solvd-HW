@@ -1,5 +1,5 @@
 package com.hw2;
-public class License 
+public class License implements Revokable
 {
     //Not actually sure if there are different types, just added it for another field
     private String type;
@@ -31,4 +31,15 @@ public class License
         this.isActive = newStatus;
     }
 
+    public void revoke()
+    {
+        this.type = "Revoked";
+        this.isActive = false;
+    }
+
+    public void reInstate()
+    {
+        this.type = "Basic";
+        this.isActive = true;
+    }
 }

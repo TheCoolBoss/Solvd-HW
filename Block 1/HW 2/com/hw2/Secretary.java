@@ -1,7 +1,7 @@
 package com.hw2;
 import java.util.ArrayList;
 
-public class Secretary extends Employee
+public class Secretary extends Employee implements CanBeFired
 {
     private ArrayList<String> workList;  
 
@@ -92,5 +92,14 @@ public class Secretary extends Employee
         base += firstName.length();
         base *= lastName.length();
         return base;
+    }
+
+    public void fire()
+    {
+        System.out.println("Secretary " + firstName + " " + lastName + " has been fired!");
+        this.workList.clear();
+        this.workList = null;
+        this.salary = 0.0;
+        this.id = -1; 
     }
 }

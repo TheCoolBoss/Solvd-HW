@@ -1,5 +1,5 @@
 package com.hw2;
-public class Plan 
+public class Plan implements Taxable
 {
     private double baseCost;
     private double extraHourlyRate;    
@@ -64,5 +64,12 @@ public class Plan
         int base = 100;
         base += baseCost;
         return base;
+    }
+
+    public void addTax(double rate)
+    {
+        System.out.println("Plan is being taxed with a rate of " + rate + ".");
+        baseCost *= rate;
+        extraHourlyRate *= rate;
     }
 }
