@@ -63,8 +63,13 @@ public class Lawyer extends Employee implements CanBeFired
     }
 
 
-    public void addCase(Case caseToAdd)
+
+    public void addCase(Case caseToAdd) throws InvalidLicenseException
     {
+        if (!license.getStatus())
+        {
+            throw new InvalidLicenseException(firstName.concat(" " + lastName));
+        }
         this.cases.add(caseToAdd);
     }
 

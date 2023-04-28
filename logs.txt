@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2023-04-27T20:27:09.087280500Z</date>
+  <millis>1682627229087</millis>
+  <nanos>280500</nanos>
+  <sequence>0</sequence>
+  <logger>Main</logger>
+  <level>INFO</level>
+  <class>com.hw2.Main</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Law firm The Law:
+Lawyers:
+Lawyer Matthew Johnson
+Lawyer 1 2
+Lawyer Solid Snake
+Lawyer The Remote Lawyer
+
+Secretaries:
+Secretary Jane Doe
+Secretary Jane Doe 2
+</message>
+</record>
+<record>
+  <date>2023-04-27T20:27:09.139654Z</date>
+  <millis>1682627229139</millis>
+  <nanos>654000</nanos>
+  <sequence>1</sequence>
+  <logger>Main</logger>
+  <level>INFO</level>
+  <class>com.hw2.Main</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Law firm The Law(Physical):
+Lawyers:
+
+Secretaries:
+</message>
+</record>
+<record>
+  <date>2023-04-27T20:27:09.141479400Z</date>
+  <millis>1682627229141</millis>
+  <nanos>479400</nanos>
+  <sequence>2</sequence>
+  <logger>Main</logger>
+  <level>INFO</level>
+  <class>com.hw2.Main</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Law firm The Law(Remote):
+Lawyers:
+
+Secretaries:
+</message>
+</record>
+<record>
+  <date>2023-04-27T20:27:09.143472Z</date>
+  <millis>1682627229143</millis>
+  <nanos>472000</nanos>
+  <sequence>3</sequence>
+  <logger>Main</logger>
+  <level>INFO</level>
+  <class>com.hw2.Main</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Law firm Boros:
+Lawyers:
+
+Secretaries:
+</message>
+</record>
+<record>
+  <date>2023-04-27T20:27:09.145466400Z</date>
+  <millis>1682627229145</millis>
+  <nanos>466400</nanos>
+  <sequence>4</sequence>
+  <logger>Main</logger>
+  <level>INFO</level>
+  <class>com.hw2.Main</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>License of Matthew Johnson is invalid. Cannot perform requested action.</message>
+</record>
+<record>
+  <date>2023-04-27T20:27:09.146465500Z</date>
+  <millis>1682627229146</millis>
+  <nanos>465500</nanos>
+  <sequence>5</sequence>
+  <logger>Main</logger>
+  <level>INFO</level>
+  <class>com.hw2.Main</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>There are no cases for client John Doe.</message>
+</record>
+<record>
+  <date>2023-04-27T20:27:09.149456800Z</date>
+  <millis>1682627229149</millis>
+  <nanos>456800</nanos>
+  <sequence>6</sequence>
+  <logger>Main</logger>
+  <level>INFO</level>
+  <class>com.hw2.Main</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Firm The Law(Now closed.) has been closed. Cannot perform this action.</message>
+</record>
+</log>

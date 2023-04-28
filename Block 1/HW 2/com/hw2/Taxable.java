@@ -2,5 +2,5 @@ package com.hw2;
 
 public interface Taxable 
 {
-    void addTax(double rate);    
+    void addTax(double rate) throws InvalidTaxRate;    
 }

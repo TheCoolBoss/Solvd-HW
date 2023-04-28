@@ -54,6 +54,24 @@ public class LawFirm implements CanBeShutDown
         this.name = newName;
     }
     
+    public void addEmployee(Employee employee) throws ClosedLawFirmException
+    {
+        if (this.name.contains("closed"))
+        {
+            throw new ClosedLawFirmException(name);
+        }
+
+        if (employee instanceof Lawyer)
+        {
+            this.lawyers.add((Lawyer) employee);
+        }
+
+        else if (employee instanceof Secretary)
+        {
+            this.secretaries.add((Secretary) employee);
+        }
+    }
+
 
     public String getInfoAsList(String type, ArrayList list)
     {
@@ -87,7 +105,7 @@ public class LawFirm implements CanBeShutDown
 
     public void listPlans(int hours)
     {
-        System.out.println("The costs of a " + hours + " hour plan for all lawyers in " + name + " are:");
+        System.out.println("The costs of a " + hours + " hour plan for all lawyers in " + name + " are:\n");
         for (Lawyer lawyer: lawyers) 
         {
             double base = lawyer.getPlan().getBaseCost();
@@ -95,7 +113,7 @@ public class LawFirm implements CanBeShutDown
             System.out.println(lawyer.getFirstName() + " " + lawyer.getLastName() + ":");
             System.out.println("Base rate of " + base + ", plus hourly rate of " + hourRate);
             double total = (base + (hourRate * hours));
-            System.out.println("Total: " + total);
+            System.out.println("Total: " + total + "\n");
         }
     }    
 

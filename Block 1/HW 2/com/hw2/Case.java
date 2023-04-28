@@ -5,27 +5,25 @@ public class Case implements Closable
     private String date;
     private String plaintiff;
     private String defendant;
+    private int duration;
     private boolean isOpen;
 
-    public Case(String title, String date, String plaintiff, String defendant)
+    public Case(String title, String date, String plaintiff, String defendant, int duration)
     {
         this.title = title;
         this.date = date;
         this.plaintiff = plaintiff;
         this.defendant = defendant;
         this.isOpen = true;
+        this.duration = duration;
     }
 
-    public Case(String date, String plaintiff, String defendant)
+    public Case(String date, String plaintiff, String defendant, int duration)
     {
-        this.title = "Private Case";
-        this.plaintiff = plaintiff;
-        this.defendant = defendant;
-        this.date = date;
-        this.isOpen = true;
+        this("Private Case", date, plaintiff, defendant, duration);
     }
 
-
+    //Get/setters
     public String getTitle()
     {
         return this.title;
@@ -51,14 +49,41 @@ public class Case implements Closable
         return this.isOpen;
     }
 
-    public void setTitle(String newTitle)
+    public int getDuration()
     {
+        return this.duration;
+    }
+
+    //I feel like case info shouldn't be changeable if closed, since it's not relevant anymore
+    //Exception for the actual status
+    public void setTitle(String newTitle) throws ClosedCaseException
+    {
+        if (!isOpen)
+        {
+            throw new ClosedCaseException(title);
+        }
+
         this.title = newTitle;
     }
 
-    public void setDate(String newDate)
+    public void setDate(String newDate) throws ClosedCaseException
     {
+        if (!isOpen)
+        {
+            throw new ClosedCaseException(title);
+        }
+        
         this.date = newDate;
+    }
+
+    public void setDuration(int newDuration) throws ClosedCaseException
+    {
+        if (!isOpen)
+        {
+            throw new ClosedCaseException(title);
+        }
+        
+        this.duration = newDuration;
     }
 
     public void setStatus(boolean newStatus)
@@ -66,6 +91,7 @@ public class Case implements Closable
         this.isOpen = newStatus;
     }
 
+    //Misc
     public String toString()
     {
         String toRet = "Case " + title + " of date " + date + " is ";
@@ -87,10 +113,18 @@ public class Case implements Closable
     {
         System.out.println("Closing case " + title);
         setStatus(false);
-        setTitle(title.concat("(Closed)"));
+
+        try
+        {
+            setTitle(title.concat("(Closed)"));
+        }
+
+        catch (ClosedCaseException cce)
+        {
+            System.out.println(cce.getMessage());
+        }
     }
 
-    //This assumes that cases don't have a ( in their actual name
     public void reOpen()
     {
         System.out.println("Reopening case " + title);
@@ -102,7 +136,15 @@ public class Case implements Closable
 
         else
         {
-            setTitle(title.substring(0, title.indexOf("(Closed)")));
+            try
+            {
+                setTitle(title.substring(0, title.indexOf("(Closed)")));
+            }
+    
+            catch (ClosedCaseException cce)
+            {
+                System.out.println(cce.getMessage());
+            }
         }
     }
 }

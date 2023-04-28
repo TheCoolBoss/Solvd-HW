@@ -66,10 +66,22 @@ public class Plan implements Taxable
         return base;
     }
 
-    public void addTax(double rate)
+    //Rate is percent to add on
+    //I.e. a rate of 5 indicates the new rate being 105% of the old one
+    public void addTax(double rate) throws InvalidTaxRate
     {
+        if (rate < 5.0)
+        {
+            throw new InvalidTaxRate("Rate is lower than 5%");
+        }
+
+        else if (rate > 10.0)
+        {
+            throw new InvalidTaxRate("Rate is larger than 10%");
+        }
+        
         System.out.println("Plan is being taxed with a rate of " + rate + ".");
-        baseCost *= rate;
-        extraHourlyRate *= rate;
+        baseCost *= 1 + (rate * 0.01);
+        extraHourlyRate *= 1 + (rate * 0.01);
     }
 }

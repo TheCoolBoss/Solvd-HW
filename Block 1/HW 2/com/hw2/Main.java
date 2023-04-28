@@ -1,123 +1,101 @@
 package com.hw2;
-
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 public class Main 
 {
     public static void main(String[] args)
     {
-        ArrayList<LawFirm> lawFirms = new ArrayList<LawFirm>();
-        LawFirm theLaw = new LawFirm("The Law");
-        LawFirmPhysical theLawPhysical = new LawFirmPhysical(theLaw.getName(), "USA");
-        LawFirmRemote theLawRemote = new LawFirmRemote(theLaw.getName(), "PST", "thelaw.com");
-        lawFirms.add(theLaw);
-        lawFirms.add(theLawPhysical);
-        lawFirms.add(theLawRemote);
+        Logger log = Logger.getLogger("Main");
+        FileHandler fh;
 
-        Case privateCase1 = new Case("Dummy Case", "4/16", "Test Plaintiff", "Test Defendant");
-        Case defamation1 = new CaseDefamation("Defamation 1", "4/22", "Plaintiff", "Defendant");
-        theLaw.getCases().add(privateCase1);
-        theLaw.getCases().add(defamation1);
+        try
+        {
+            fh = new FileHandler("logs.log");
+            log.addHandler(fh);
+        }
 
-        defamation1.close();
-        defamation1.reOpen();
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please input a law firm name");
+        String name = scanner.nextLine();
 
-        Client angryConsumer1 = new Client("Angry", "Consumer");
-        theLaw.getClients().add(angryConsumer1);
+        try 
+        {
+            Helpers.checkLength(name);
+        }
 
-        Plan basicPlan = new Plan(50.00, 10.00);
-        Plan moreHoursPlan = new Plan(80.00, 7.00);
-        Plan fewHoursPlan = new Plan(30.00, 15.00);
+        catch (Exception e)
+        {
+            System.out.println("String was invalid. Using a default value now.");
+            name = "Default Name";
+        }
+
+        finally
+        {
+            scanner.close();
+        }
+
         
-        License basicLicense = new License("Basic");
-        License advancedLicense = new License("Advanced");
+        ArrayList<LawFirm> lawFirms = Helpers.initLawFirms();
+        lawFirms.add(new LawFirm(name));
+        LawFirm theLaw = lawFirms.get(0);
+        Helpers.initEmployees(theLaw);
+        Helpers.initCases(theLaw);
+        Helpers.initClients(theLaw);
 
-        Secretary janeDoe = new Secretary("Jane", "Doe", 10, "5/4/32");
-        janeDoe.addWork("Shred papers.");
-
-        Secretary janeDoe2 = new Secretary("Jane", "Doe", 10, "5/4/32");
-
-        Lawyer mattJohnson = new Lawyer("Matthew", "Johnson", basicPlan, basicLicense, janeDoe, "4/20/23", 1);
-        for (Case c : theLaw.getCases()) 
+        for (LawFirm lawFirm : lawFirms) 
         {
-            mattJohnson.getCases().add(c);
+            log.info(lawFirm.toString());    
+        }
+        Helpers.printBreak();
+        Client client1 = theLaw.getClients().get(0);
+
+        //Used for testing
+        //client1.addCase(theLaw.cases.get(0));
+        //client1.addCase(theLaw.getCases().get(1));
+
+        theLaw.getLawyers().get(0).fire();
+        Case firedCase = new Case("Fired Case", "The Law", "Lawyer", 6);
+
+        //Attempt to add a case to a fired lawyer
+        try
+        {
+            theLaw.getLawyers().get(0).addCase(firedCase);
         }
 
-        Lawyer numberLawyer = new Lawyer("1", "2", moreHoursPlan, basicLicense, janeDoe, "4/4", 2);
-        Lawyer snake = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe, "1/1/11", 3);
-        Lawyer snakeCopy = new Lawyer("Solid", "Snake", fewHoursPlan, advancedLicense, janeDoe, "1/1/11", 3);
-        LawyerRemote remoteLawyer = new LawyerRemote("The", "Remote Lawyer", basicPlan, advancedLicense, janeDoe, "1/2/34", 5);
-
-
-
-        theLaw.getLawyers().add(mattJohnson);
-        theLaw.getLawyers().add(numberLawyer);
-        theLaw.getLawyers().add(snake);
-        theLaw.getLawyers().add(snakeCopy);
-        theLaw.getLawyers().add(remoteLawyer);
-        theLaw.getSecretaries().add(janeDoe);
-
-        System.out.println(theLaw.toString());
-        mattJohnson.printWork();
-        janeDoe.toString();
-        janeDoe.printWork();
-
-        if (snake.equals(snakeCopy))
+        catch (InvalidLicenseException ile)
         {
-            System.out.println("Two snakes.");
+            log.info(ile.getMessage());
         }
 
-        if (snake.equals(mattJohnson))
+        //Attempt to print costs when a client has no cases
+        try
         {
-            System.out.println("Snake is Matt Johnson");
+            client1.printCosts(theLaw);
         }
 
-        else
+        catch (NoCasesFoundException ncfe)
         {
-            System.out.println("Snake is not Matt Johnson.");
+           log.info(ncfe.getMessage());
         }
 
-        if (janeDoe.equals(janeDoe2))
-        {
-            System.out.println("There are 2 Jane Doe secretaries");
-        }
-
-        printBreak();
-        theLaw.listPlans(5);
-        printBreak();
-        theLaw.getLawyers().remove(snakeCopy);
-        snakeCopy.fire();
-        printBreak();
-
+        //Attempt to add an employee to a closed law firm (should fail)
         theLaw.closeDown();
-        theLawPhysical.closeDown();
-        theLawRemote.closeDown();
+        try
+        {
+            theLaw.addEmployee(new Lawyer("A", "b", new Plan(5.0), new License("t"), null, "1", 9));
+        }
 
-        clearLawFirms(lawFirms);
+        catch (ClosedLawFirmException clfe)
+        {
+            log.info(clfe.getMessage());
+        }
+        
     }    
-
-    public static void printBreak()
-    {
-        System.out.println("");
-    }
-
-    public static void clearLawFirms(ArrayList<LawFirm> firms)
-    {
-        //ConcurrentModificationException happens if removing is done during iteration
-        ArrayList<Integer> indicesToRemove = new ArrayList<Integer>();
-
-        for (LawFirm firm : firms) 
-        {
-            if (firm.getName().contains("closed"))
-            {
-                System.out.println("Removing law firm " + firm.getName());
-                indicesToRemove.add(firms.indexOf(firm));
-            }
-        }
-
-        for (Integer index : indicesToRemove)
-        {
-            firms.remove(index);
-        }
-    }
 }
