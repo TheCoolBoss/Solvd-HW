@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "Block 1/HW 2/com/hw2/log4j-api-2.20.0.jar",
+        "Block 1/HW 2/com/hw2/log4j-core-2.20.0.jar"
+    ]
+}
