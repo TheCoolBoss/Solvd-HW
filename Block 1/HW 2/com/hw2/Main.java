@@ -55,30 +55,35 @@ public class Main
         Helpers.printBreak();
         Client client1 = theLaw.getClients().get(0);
 
-        try
+        while (true)
         {
-            client1.printCosts(theLaw);
-        }
-
-        catch (NoCasesFoundException ncfe)
-        {
-            LOGGER.error(ncfe.getMessage());
-            LOGGER.info("Adding cases from law firm " + theLaw.getName());
-            for (Case c : theLaw.getCases()) 
+            try
             {
-                client1.addCase(c);
+                client1.printCosts(theLaw);
+                break;
+            }
+    
+            catch (NoCasesFoundException ncfe)
+            {
+                LOGGER.error(ncfe.getMessage());
+                LOGGER.info("Adding cases from law firm " + theLaw.getName());
+                for (Case c : theLaw.getCases()) 
+                {
+                    client1.addCase(c);
+                }
+            }
+    
+            //Need to figure out how to just loop above
+            try
+            {
+                client1.printCosts(theLaw);
+            }
+    
+            catch (NoCasesFoundException ncfe)
+            {
+                LOGGER.error(ncfe.getMessage());
             }
         }
 
-        //Need to figure out how to just loop above
-        try
-        {
-            client1.printCosts(theLaw);
-        }
-
-        catch (NoCasesFoundException ncfe)
-        {
-            LOGGER.error(ncfe.getMessage());
-        }
     }    
 }
