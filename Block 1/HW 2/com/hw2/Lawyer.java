@@ -2,6 +2,10 @@ package com.hw2;
 
 import java.util.ArrayList;
 
+import com.hw2.Exceptions.InvalidLicenseException;
+import com.hw2.Interfaces.CanBeFired;
+import org.apache.logging.log4j.Logger;
+
 public class Lawyer extends Employee implements CanBeFired
 {
     private Plan plan;
@@ -123,16 +127,16 @@ public class Lawyer extends Employee implements CanBeFired
         return base;
     }
 
-    public void printWork()
+    public void printWork(Logger logger)
     {
         String caseList = listCases();
-        System.out.println("List of cases for lawyer " + getFirstName() + " " + getLastName() + ":\n"
+        logger.info("List of cases for lawyer " + getFirstName() + " " + getLastName() + ":\n"
                             + caseList);
     }
 
-    public void fire()
+    public void fire(Logger logger)
     {
-        System.out.println("Lawyer " + firstName + " " + lastName + " has been fired!");
+        logger.info("Lawyer " + firstName + " " + lastName + " has been fired!");
         this.plan = null;
         this.secretary = null;
         this.salary = 0.0;

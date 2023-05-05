@@ -1,5 +1,7 @@
 package com.hw2;
 
+import org.apache.logging.log4j.Logger;
+
 public abstract class Employee
 {
     protected String firstName;
@@ -15,7 +17,7 @@ public abstract class Employee
     }
 
 
-    public abstract void printWork();
+    public abstract void printWork(Logger logger);
 
     //Setters for date of hire and id omitted because they don't seem 100% necessary for this type of system
     public String getFirstName()

@@ -1,6 +1,11 @@
 package com.hw2;
 import java.util.ArrayList;
 
+import com.hw2.Exceptions.ClosedLawFirmException;
+import com.hw2.Exceptions.NoCasesFoundException;
+import com.hw2.Interfaces.CanBeShutDown;
+import org.apache.logging.log4j.Logger;
+
 public class LawFirm implements CanBeShutDown
 {
     private static final String COUNTRY = "USA";
@@ -73,7 +78,7 @@ public class LawFirm implements CanBeShutDown
     }
 
 
-    public String getInfoAsList(String type, ArrayList list)
+    public <T> String getInfoAsList(String type, ArrayList<T> list)
     {
         String toRet = type + ":\n";
         for (Object item : list) 
@@ -94,44 +99,62 @@ public class LawFirm implements CanBeShutDown
                 + secretaryList);
     }
 
-
-    public void areThereClients()
+    public void listPlans(int hours, Logger logger)
     {
-        if (this.clients.size() > 0)
-        {
-            System.out.println("The client list is not empty. You will have to wait. :(");
-        }
-    }
-
-    public void listPlans(int hours)
-    {
-        System.out.println("The costs of a " + hours + " hour plan for all lawyers in " + name + " are:\n");
+        logger.info("The costs of a " + hours + " hour plan for all lawyers in " + name + " are:\n");
         for (Lawyer lawyer: lawyers) 
         {
             double base = lawyer.getPlan().getBaseCost();
             double hourRate = lawyer.getPlan().getHourRate();
-            System.out.println(lawyer.getFirstName() + " " + lawyer.getLastName() + ":");
-            System.out.println("Base rate of " + base + ", plus hourly rate of " + hourRate);
+            logger.info(lawyer.getFirstName() + " " + lawyer.getLastName() + ":");
+            logger.info("Base rate of " + base + ", plus hourly rate of " + hourRate);
             double total = (base + (hourRate * hours));
-            System.out.println("Total: " + total + "\n");
+            logger.info("Total: " + total + "\n");
         }
     }    
 
-    public void closeDown()
+    public void printCosts(Client client, Logger logger) throws NoCasesFoundException
     {
-        System.out.println("Law firm " + name + " is being shut down by the government.");
+        if (client.getCases().size() == 0)
+        {
+            throw new NoCasesFoundException(client.getFirstName().concat(" " + client.getLastName()));
+        }
+
+        else
+        {
+            logger.info("Listing costs for all cases for " + client.getFirstName() + " " + client.getLastName() + ":\n");
+            ArrayList<Integer> caseDurations = new ArrayList<Integer>();
+
+            for (Case c : client.getCases())
+            {
+                caseDurations.add(c.getDuration());
+            }
+    
+            for (Integer i : caseDurations)
+            {
+                int index = caseDurations.indexOf(i);
+                logger.info("Case " + client.getCases().get(index).getTitle() + ":");
+                this.listPlans(i, logger);
+                logger.info("----------------------\n");
+            }
+        }
+    }
+
+    public void closeDown(Logger logger)
+    {
+        logger.info("Law firm " + name + " is being shut down by the government.");
 
         name = name.concat("(Now closed.)");
         clients.clear();
 
         for (Lawyer lawyer: lawyers) 
         {
-            lawyer.fire();
+            lawyer.fire(logger);
         }
 
         for (Secretary secretary : secretaries)
         {
-            secretary.fire();
+            secretary.fire(logger);
         }
 
         cases.clear();

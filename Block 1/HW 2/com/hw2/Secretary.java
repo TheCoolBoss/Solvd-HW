@@ -1,5 +1,8 @@
 package com.hw2;
+
 import java.util.ArrayList;
+import com.hw2.Interfaces.CanBeFired;
+import org.apache.logging.log4j.Logger;
 
 public class Secretary extends Employee implements CanBeFired
 {
@@ -58,10 +61,10 @@ public class Secretary extends Employee implements CanBeFired
         return "Secretary " + getFirstName() + " " + getLastName();
     }
 
-    public void printWork()
+    public void printWork(Logger logger)
     {
-        System.out.println("List of work for secretary " + firstName + " " + lastName + ":");
-        System.out.println(listAllWork());
+        logger.info("List of work for secretary " + firstName + " " + lastName + ":");
+        logger.info(listAllWork());
     }
 
     public boolean equals(Object toCompare)
@@ -94,9 +97,9 @@ public class Secretary extends Employee implements CanBeFired
         return base;
     }
 
-    public void fire()
+    public void fire(Logger logger)
     {
-        System.out.println("Secretary " + firstName + " " + lastName + " has been fired!");
+        logger.info("Secretary " + firstName + " " + lastName + " has been fired!");
         this.workList.clear();
         this.workList = null;
         this.salary = 0.0;

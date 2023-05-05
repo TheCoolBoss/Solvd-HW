@@ -1,5 +1,7 @@
 package com.hw2;
 
+import org.apache.logging.log4j.Logger;
+
 public final class CaseDefamation extends Case
 {
     public CaseDefamation(String title, String date, String plaintiff, String defendant, int duration)
@@ -7,8 +9,8 @@ public final class CaseDefamation extends Case
         super(title, date, plaintiff, defendant, duration);
     }
 
-    public final void printDetails()
+    public final void printDetails(Logger logger)
     {
-        System.out.println("Plaintiff " + this.getPlaintiff() + " is suing " + this.getDefendant() + " for defamation.");
+        logger.info("Plaintiff " + this.getPlaintiff() + " is suing " + this.getDefendant() + " for defamation.");
     }
 }

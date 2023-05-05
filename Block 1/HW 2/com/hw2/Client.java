@@ -61,32 +61,4 @@ public class Client
     {
         this.cases.remove(caseToRemove);
     }
-
-
-    public void printCosts(LawFirm firm) throws NoCasesFoundException
-    {
-        if (this.cases.size() == 0)
-        {
-            throw new NoCasesFoundException(firstName.concat(" " + lastName));
-        }
-
-        else
-        {
-            System.out.println("Listing costs for all cases for " + firstName + " " + lastName + ":\n");
-            ArrayList<Integer> caseDurations = new ArrayList<Integer>();
-
-            for (Case c : this.cases)
-            {
-                caseDurations.add(c.getDuration());
-            }
-    
-            for (Integer i : caseDurations)
-            {
-                int index = caseDurations.indexOf(i);
-                System.out.println("Case " + cases.get(index).getTitle() + ":");
-                firm.listPlans(i);
-                System.out.println("----------------------\n");
-            }
-        }
-    }
 }

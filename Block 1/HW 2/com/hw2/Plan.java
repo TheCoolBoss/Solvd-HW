@@ -1,4 +1,8 @@
 package com.hw2;
+
+import com.hw2.Exceptions.InvalidTaxRateException;
+import com.hw2.Interfaces.Taxable;
+
 public class Plan implements Taxable
 {
     private double baseCost;
@@ -68,16 +72,16 @@ public class Plan implements Taxable
 
     //Rate is percent to add on
     //I.e. a rate of 5 indicates the new rate being 105% of the old one
-    public void addTax(double rate) throws InvalidTaxRate
+    public void addTax(double rate) throws InvalidTaxRateException
     {
         if (rate < 5.0)
         {
-            throw new InvalidTaxRate("Rate is lower than 5%");
+            throw new InvalidTaxRateException("Rate is lower than 5%");
         }
 
         else if (rate > 10.0)
         {
-            throw new InvalidTaxRate("Rate is larger than 10%");
+            throw new InvalidTaxRateException("Rate is larger than 10%");
         }
         
         System.out.println("Plan is being taxed with a rate of " + rate + ".");

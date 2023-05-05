@@ -1,4 +1,9 @@
 package com.hw2;
+
+import com.hw2.Exceptions.ClosedCaseException;
+import com.hw2.Interfaces.Closable;
+import org.apache.logging.log4j.Logger;
+
 public class Case implements Closable
 {
     private String title;
@@ -109,7 +114,7 @@ public class Case implements Closable
         return toRet.concat(status);
     }
 
-    public void close()
+    public void close(Logger logger)
     {
         System.out.println("Closing case " + title);
         setStatus(false);
@@ -121,17 +126,17 @@ public class Case implements Closable
 
         catch (ClosedCaseException cce)
         {
-            System.out.println(cce.getMessage());
+            logger.error(cce.getMessage());
         }
     }
 
-    public void reOpen()
+    public void reOpen(Logger logger)
     {
-        System.out.println("Reopening case " + title);
+        logger.info("Reopening case " + title);
         setStatus(true);
         if (!title.contains("Closed"))
         {
-            System.out.println("Case is already open.");
+            logger.error("Case is already open.");
         }
 
         else
@@ -143,7 +148,7 @@ public class Case implements Closable
     
             catch (ClosedCaseException cce)
             {
-                System.out.println(cce.getMessage());
+                logger.error(cce.getMessage());
             }
         }
     }

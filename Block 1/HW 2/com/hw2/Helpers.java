@@ -1,6 +1,8 @@
 package com.hw2;
 
 import java.util.ArrayList;
+import org.apache.logging.log4j.Logger;
+import com.hw2.Exceptions.ClosedLawFirmException;
 
 public class Helpers 
 {
@@ -17,7 +19,7 @@ public class Helpers
         return lawFirms;
     }
 
-    public static void initEmployees(LawFirm firm)
+    public static void initEmployees(LawFirm firm, Logger logger)
     {
         //Plans for lawyers to use
         Plan basicPlan = new Plan(50.00, 10.00);
@@ -50,7 +52,7 @@ public class Helpers
 
         catch (ClosedLawFirmException clfe)
         {
-            System.out.println("Law firm " + firm.name + " is closed.");
+            logger.error("Law firm " + firm.name + " is closed.");
         }
 
     }
@@ -73,7 +75,7 @@ public class Helpers
         firm.getCases().add(privateCase1);
     }
 
-    public static void clearLawFirms(ArrayList<LawFirm> firms)
+    public static void clearLawFirms(ArrayList<LawFirm> firms, Logger logger)
     {
         //ConcurrentModificationException happens if removing is done during iteration
         ArrayList<Integer> indicesToRemove = new ArrayList<Integer>();
@@ -82,27 +84,14 @@ public class Helpers
         {
             if (firm.getName().contains("closed"))
             {
-                System.out.println("Removing law firm " + firm.getName());
+                logger.info("Removing law firm " + firm.getName());
                 indicesToRemove.add(firms.indexOf(firm));
             }
         }
 
         for (Integer index : indicesToRemove)
         {
-            firms.remove(index);
-        }
-    }
-
-    public static void printBreak()
-    {
-        System.out.println("");
-    }
-
-    public static void checkLength(String str) throws Exception
-    {
-        if (str.length() == 0)
-        {
-            throw new Exception("Length of the string is 0 (invalid).");
+            firms.remove(index.intValue());
         }
     }
 }

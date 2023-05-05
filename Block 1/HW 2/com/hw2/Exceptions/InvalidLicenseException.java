@@ -1,4 +1,4 @@
-package com.hw2;
+package com.hw2.Exceptions;
 
 public class InvalidLicenseException extends Exception
 {

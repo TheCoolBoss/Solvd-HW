@@ -1,65 +1,77 @@
 package com.hw2;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.hw2.Exceptions.ClosedLawFirmException;
+import com.hw2.Exceptions.NoCasesFoundException;
+
 
 public class Main 
 {
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+
     public static void main(String[] args)
     {
-        final Logger LOGGER = LogManager.getLogger(Main.class);
-        LinkedList<Integer> testList = new LinkedList<Integer>(1);
-        System.out.println(LOGGER.isInfoEnabled());
-        testList.addNode(2);
-        testList.addNode(3);
-        testList.printList(testList);
-        testList.removeNode(5);
-        testList.removeNode(3);
-        testList.printList(testList);
-
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please input a law firm name");
-        String name = scanner.nextLine();
-
+        LOGGER.info("Please input a law firm name");
+        String scannerName;
         try 
         {
-            Helpers.checkLength(name);
+            scannerName = scanner.nextLine();
+
         }
 
         catch (Exception e)
         {
-            System.out.println("String was invalid. Using a default value now.");
-            name = "Default Name";
+            LOGGER.error(e.getMessage());
+            scannerName = "Default Name";
         }
 
-        finally
-        {
-            scanner.close();
-        }
+        scanner.close();
 
-        
         ArrayList<LawFirm> lawFirms = Helpers.initLawFirms();
-        lawFirms.add(new LawFirm(name));
         LawFirm theLaw = lawFirms.get(0);
-        Helpers.initEmployees(theLaw);
+        Helpers.initEmployees(theLaw, LOGGER);
         Helpers.initCases(theLaw);
         Helpers.initClients(theLaw);
 
-        LOGGER.info("test");
+
+        LawFirm customFirm = new LawFirm(scannerName);
+        lawFirms.add(customFirm);
+        
+
+        Plan aureliaPlan = new Plan(6.0, 4.0);
+        License guildmaster = new License("Guildmaster");
+        Secretary tajic = new Secretary("Tajic", "", 107, "2013");
+        Lawyer aurelia = new Lawyer("Aurelia", "", aureliaPlan, guildmaster, tajic, "2013", 143);
+        try
+        {
+            customFirm.addEmployee(aurelia);
+            customFirm.addEmployee(tajic);
+        }
+
+        catch (ClosedLawFirmException clfe)
+        {
+            LOGGER.error(clfe.getMessage());
+        }
+
+        
         for (LawFirm lawFirm : lawFirms) 
         {
             LOGGER.info(lawFirm.toString());    
         }
-        Helpers.printBreak();
+
+        printBreak();
         Client client1 = theLaw.getClients().get(0);
 
         while (true)
         {
             try
             {
-                client1.printCosts(theLaw);
+                customFirm.printCosts(client1, LOGGER);
                 break;
             }
     
@@ -72,18 +84,11 @@ public class Main
                     client1.addCase(c);
                 }
             }
-    
-            //Need to figure out how to just loop above
-            try
-            {
-                client1.printCosts(theLaw);
-            }
-    
-            catch (NoCasesFoundException ncfe)
-            {
-                LOGGER.error(ncfe.getMessage());
-            }
         }
-
     }    
+
+    public static void printBreak()
+    {
+        LOGGER.info("");
+    }
 }

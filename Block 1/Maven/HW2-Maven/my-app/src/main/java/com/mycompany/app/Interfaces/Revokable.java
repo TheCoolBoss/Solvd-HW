@@ -1,4 +1,4 @@
-package com.hw2;
+package com.mycompany.app.Interfaces;
 
 public interface Revokable 
 {

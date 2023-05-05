@@ -1,4 +1,7 @@
 package com.hw2;
+
+import com.hw2.Interfaces.Revokable;
+
 public class License implements Revokable
 {
     //Not actually sure if there are different types, just added it for another field

@@ -6,6 +6,55 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.mycompany.app.Main",
+            "projectName": "my-app"
+        },
+        {
+            "type": "java",
+            "name": "Printer",
+            "request": "launch",
+            "mainClass": "com.mycompany.app.Printer",
+            "projectName": "com.mycompany.app-my-app"
+        },
+        {
+            "type": "java",
+            "name": "Sorter",
+            "request": "launch",
+            "mainClass": "com.mycompany.app.Sorter",
+            "projectName": "com.mycompany.app-my-app"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "Solvd-HW_801c72d1"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "main.java.com.mycompany.app.Main",
+            "projectName": "Solvd-HW_801c72d1"
+        },
+        {
+            "type": "java",
+            "name": "Sorter",
+            "request": "launch",
+            "mainClass": "Sorter",
+            "projectName": "Solvd-HW_801c72d1"
+        },
+        {
+            "type": "java",
+            "name": "Printer",
+            "request": "launch",
+            "mainClass": "Printer",
+            "projectName": "Solvd-HW_801c72d1"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
