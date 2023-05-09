@@ -8,6 +8,7 @@ public enum LicenseType
     OTHER("Other");
 
     private String type;
+    
     LicenseType(String type)
     {
         this.type = type;
