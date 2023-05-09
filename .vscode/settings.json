@@ -11,7 +11,8 @@
         "Block 1\\HW 2",
         "Block 1\\Maven\\HW1-Maven\\my-app\\src\\main\\java\\com\\mycompany\\app",
         "Block 1\\Maven\\HW2-Maven\\my-app\\src\\main\\java\\com\\mycompany\\app",
-        "Block 1\\Maven\\HW2-Maven\\my-app"
+        "Block 1\\Maven\\HW2-Maven\\my-app",
+        "Block 1\\Maven\\HW2-Maven\\my-app\\src"
     ],
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

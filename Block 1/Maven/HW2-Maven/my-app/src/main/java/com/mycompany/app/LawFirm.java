@@ -13,6 +13,7 @@ public class LawFirm implements CanBeShutDown
     protected ArrayList<Secretary> secretaries;
     protected ArrayList<Client> clients;
     protected ArrayList<Case> cases;
+    protected LinkedList<LawFirm> subsidiaries;
 
     static
     {
@@ -26,6 +27,7 @@ public class LawFirm implements CanBeShutDown
         this.clients = new ArrayList<Client>();
         this.secretaries = new ArrayList<Secretary>();
         this.cases = new ArrayList<Case>();
+        this.subsidiaries = new LinkedList<LawFirm>(null);
     }
 
     public String getName()
@@ -42,6 +44,11 @@ public class LawFirm implements CanBeShutDown
     {
         return this.secretaries;
     }
+    
+    public LinkedList<LawFirm> getsubsidiaries()
+    {
+        return this.subsidiaries;
+    }
 
     public ArrayList<Client> getClients()
     {
@@ -57,7 +64,15 @@ public class LawFirm implements CanBeShutDown
     {
         this.name = newName;
     }
+
+    public void setSubsidiaries(LinkedList<LawFirm> newSubsidiaries)
+    {
+        this.subsidiaries = newSubsidiaries;
+    }
     
+
+
+
     public void addEmployee(Employee employee) throws ClosedLawFirmException
     {
         if (this.name.contains("closed"))
