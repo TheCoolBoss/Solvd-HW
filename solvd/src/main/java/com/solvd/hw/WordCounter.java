@@ -16,6 +16,11 @@ public class WordCounter
         Logger logger = LogManager.getLogger("Main");
         File toRead = FileUtils.getFile("words.txt");
 
+        if (toRead == null)
+        {
+            toRead = FileUtils.getFile("words.txt");
+        }
+
         try
         {
             String contents = FileUtils.readFileToString(toRead, StandardCharsets.UTF_8);
