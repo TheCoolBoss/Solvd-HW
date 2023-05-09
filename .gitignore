@@ -23,5 +23,5 @@
 hs_err_pid*
 
 #Folders
-.vscode/
-target/
+.vscode/*
+target/*
