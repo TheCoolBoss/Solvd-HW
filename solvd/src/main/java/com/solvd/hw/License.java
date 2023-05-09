@@ -1,22 +1,41 @@
 package com.solvd.hw;
 
+import com.solvd.hw.enums.*;
 import com.solvd.hw.interfaces.*;
 
 public class License implements Revokable
 {
-    //Not actually sure if there are different types, just added it for another field
-    private String type;
+    private LicenseType type;
     private boolean isActive;    
 
     public License(String type)
     {
-        this.type = type;
+        if (type.equalsIgnoreCase("basic"))
+        {
+            this.type = LicenseType.BASIC;
+        }
+
+        else if (type.equalsIgnoreCase("advanced"))
+        {
+            this.type = LicenseType.ADVANCED;
+        }
+
+        else if (type.equalsIgnoreCase("revoked"))
+        {
+            this.type = LicenseType.REVOKED;
+        }
+
+        else
+        {
+            this.type = LicenseType.OTHER;
+        }
+
         this.isActive = true;
     }
 
     public String getType()
     {
-        return this.type;
+        return this.type.toString();
     }
 
     public boolean getStatus()
@@ -26,7 +45,7 @@ public class License implements Revokable
 
     public void setType(String newType)
     {
-        this.type = newType;
+        this.type = LicenseType.valueOf(newType);
     }
 
     public void setStatus(boolean newStatus)
@@ -36,13 +55,13 @@ public class License implements Revokable
 
     public void revoke()
     {
-        this.type = "Revoked";
+        this.type = LicenseType.REVOKED;
         this.isActive = false;
     }
 
     public void reInstate()
     {
-        this.type = "Basic";
+        this.type = LicenseType.BASIC;
         this.isActive = true;
     }
 }
