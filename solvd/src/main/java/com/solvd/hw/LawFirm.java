@@ -12,14 +12,14 @@ public class LawFirm implements CanBeShutDown
 {
     private static final Logger LOGGER = LogManager.getLogger(LawFirm.class);
     private static final String COUNTRY = "USA";
-
-    protected String name; 
-    protected ArrayList<Lawyer> lawyers;
-    protected ArrayList<Secretary> secretaries;
-    protected ArrayList<Client> clients;
-    protected ArrayList<Case> cases;
-    protected LinkedList<LawFirm> subsidiaries;
-    boolean isOpen;
+    
+    private String name; 
+    private ArrayList<Lawyer> lawyers;
+    private ArrayList<Secretary> secretaries;
+    private ArrayList<Client> clients;
+    private ArrayList<Case> cases;
+    private LinkedList<LawFirm> subsidiaries;
+    private boolean isOpen;
 
     static
     {

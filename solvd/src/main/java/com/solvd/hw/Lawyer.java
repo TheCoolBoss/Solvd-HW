@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import java.util.function.*;
 import com.solvd.hw.exceptions.*;
 import com.solvd.hw.interfaces.*;
 
@@ -85,17 +85,6 @@ public class Lawyer extends Employee implements CanBeFired
         this.cases.remove(caseToRemove);
     }
 
-    public String listCases()
-    {
-        String ret = "";
-        for (Case c : cases) 
-        {
-            ret = ret.concat(c.toString() + "\n");
-        }
-
-        return ret;
-    }
-
     public String toString()
     {
         return "Lawyer " + getFirstName() + " " + getLastName();
@@ -132,7 +121,14 @@ public class Lawyer extends Employee implements CanBeFired
 
     public void printWork()
     {
-        String caseList = listCases();
+        String caseList= "";
+        Function<String, String> addCase = (String caseString) -> caseString.concat("\n");
+
+        for (Case c : this.cases) 
+        {
+            caseList = caseList.concat(addCase.apply(c.getTitle()));
+        }
+
         LOGGER.info("List of cases for lawyer " + getFirstName() + " " + getLastName() + ":\n"
                             + caseList);
     }

@@ -1,14 +1,15 @@
 package com.solvd.hw;
 
+import java.util.function.BinaryOperator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import com.solvd.hw.exceptions.ClosedCaseException;
 import com.solvd.hw.interfaces.Closable;
 
 public class Case implements Closable
 {
     private static final Logger LOGGER = LogManager.getLogger(Case.class);
+    private static final BinaryOperator<String> CONCATER = (String s1, String s2) -> s1.concat(s2);
     private String title;
     private String date;
     private String plaintiff;
@@ -106,25 +107,25 @@ public class Case implements Closable
         String status = "";
         if (isOpen)
         {
-            status = "open";
+            status = "open.";
         }
 
         else
         {
-            status = "closed";
+            status = "closed.";
         }
 
-        return toRet.concat(status);
+        return CONCATER.apply(toRet, status);
     }
 
     public void close()
     {
-        System.out.println("Closing case " + title);
+        LOGGER.info("Closing case " + title);
         setStatus(false);
 
         try
         {
-            setTitle(title.concat("(Closed)"));
+            setTitle(CONCATER.apply(title, " (Closed)"));
         }
 
         catch (ClosedCaseException cce)

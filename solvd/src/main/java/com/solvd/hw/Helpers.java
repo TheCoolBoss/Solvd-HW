@@ -55,7 +55,7 @@ public class Helpers
 
         catch (ClosedLawFirmException clfe)
         {
-            logger.error("Law firm " + firm.name + " is closed.");
+            logger.error("Law firm " + firm.getName() + " is closed.");
         }
 
     }
@@ -92,9 +92,7 @@ public class Helpers
             }
         }
 
-        for (Integer index : indicesToRemove)
-        {
-            firms.remove(index.intValue());
-        }
+        Consumer<ArrayList<Integer>> remover = (ArrayList<Integer> list) -> list.stream().forEach(i -> firms.remove(i.intValue()));
+        remover.accept(indicesToRemove);
     }
 }

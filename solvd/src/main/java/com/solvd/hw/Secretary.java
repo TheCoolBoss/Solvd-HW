@@ -53,17 +53,6 @@ public class Secretary extends Employee implements CanBeFired
         this.workList = newList;
     }
 
-    public String listAllWork()
-    {
-        String ret = "";
-        for (SecretaryWork work : workList) 
-        {
-            ret = ret.concat(work.getType() + "\n");
-        }
-
-        return ret;
-    }
-
     public String toString()
     {
         return "Secretary " + getFirstName() + " " + getLastName();
@@ -72,7 +61,14 @@ public class Secretary extends Employee implements CanBeFired
     public void printWork()
     {
         LOGGER.info("List of work for secretary " + firstName + " " + lastName + ":");
-        LOGGER.info(listAllWork());
+
+        String workString = "";
+        for (SecretaryWork work : workList) 
+        {
+            workString = workString.concat(work.getType() + "\n");
+        }
+
+        LOGGER.info(workString);
     }
 
     public boolean equals(Object toCompare)

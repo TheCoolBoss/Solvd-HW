@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.solvd.hw.enums.LicenseType;
 import com.solvd.hw.exceptions.*;
+import java.util.function.*;
 
 public class Main 
 {
@@ -31,8 +30,11 @@ public class Main
 
         scanner.close();
 
+
         ArrayList<LawFirm> lawFirms = Helpers.initLawFirms();
-        LawFirm theLaw = lawFirms.get(0);
+        Supplier<LawFirm> firmFetcher = () -> lawFirms.get(0);
+        
+        LawFirm theLaw = firmFetcher.get();
         Helpers.initEmployees(theLaw, LOGGER);
         Helpers.initCases(theLaw);
         Helpers.initClients(theLaw);
@@ -60,7 +62,6 @@ public class Main
             LOGGER.info(lawFirm.toString());    
         }
 
-
         LOGGER.info("Init complete.\n");
         Client client1 = theLaw.getClients().get(0);
 
@@ -87,8 +88,6 @@ public class Main
                 }
             }
         }
-
-        LOGGER.info(theLaw.getLawyersByLicenseType(LicenseType.BASIC).toString());
     }    
 
 
