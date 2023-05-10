@@ -2,7 +2,8 @@ package com.solvd.hw;
 
 import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;
-
+import java.util.function.*;
+import com.solvd.hw.enums.SecretaryWork;
 import com.solvd.hw.exceptions.*;
 
 public class Helpers 
@@ -34,6 +35,7 @@ public class Helpers
         //Secretaries
         Secretary janeDoe = new Secretary("Jane", "Doe", 10, "5/4/32");
         Secretary janeDoe2 = new Secretary("Jane", "Doe 2", 11, "5/4/32");
+        janeDoe.getWorkList().add(SecretaryWork.SHRED);
 
         //Actual lawyers
         Lawyer mattJohnson = new Lawyer("Matthew", "Johnson", basicPlan, basicLicense, janeDoe, "4/20/23", 1);

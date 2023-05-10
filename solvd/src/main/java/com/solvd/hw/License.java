@@ -33,9 +33,9 @@ public class License implements Revokable
         this.isActive = true;
     }
 
-    public String getType()
+    public LicenseType getType()
     {
-        return this.type.toString();
+        return this.type;
     }
 
     public boolean getStatus()
@@ -43,9 +43,9 @@ public class License implements Revokable
         return this.isActive;
     }
 
-    public void setType(String newType)
+    public void setType(LicenseType newType)
     {
-        this.type = LicenseType.valueOf(newType);
+        this.type = newType;
     }
 
     public void setStatus(boolean newStatus)

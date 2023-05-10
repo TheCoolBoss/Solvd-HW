@@ -11,6 +11,13 @@ public class LinkedList<T>
         this.next = null;
     }
 
+    public LinkedList()
+    {
+        this.data = null;
+        this.next = null;
+    }
+
+    
     public void addNode(T data)
     {
         LinkedList<T> current = this;

@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.solvd.hw.enums.LicenseType;
 import com.solvd.hw.exceptions.*;
 
 public class Main 
@@ -51,7 +52,8 @@ public class Main
         }
 
         theLaw.getsubsidiaries().addNode(customFirm);
-        
+        lawFirms.add(customFirm);
+
         LOGGER.info("Info about all law firms:\n");
         for (LawFirm lawFirm : lawFirms) 
         {
@@ -67,7 +69,11 @@ public class Main
             try
             {
                 LOGGER.info("Listing costs for client " + client1.getFirstName() + " " + client1.getLastName());
-                customFirm.printCosts(client1, LOGGER);
+                for (LawFirm lawFirm : lawFirms) 
+                {
+                    lawFirm.printCosts(client1, LOGGER);
+                }
+
                 break;
             }
     
@@ -81,6 +87,8 @@ public class Main
                 }
             }
         }
+
+        LOGGER.info(theLaw.getLawyersByLicenseType(LicenseType.BASIC).toString());
     }    
 
 

@@ -9,8 +9,6 @@ public class LawyerRemote extends Lawyer
         super(firstName, lastName, plan, license, secretary, hireDate, id);
     }
 
-
-
     public String getTimeZone()
     {
         return this.timeZone;

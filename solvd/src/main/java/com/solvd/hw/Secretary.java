@@ -5,46 +5,50 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.solvd.hw.enums.SecretaryWork;
 import com.solvd.hw.interfaces.*;
 
 public class Secretary extends Employee implements CanBeFired
 {
     private static final Logger LOGGER = LogManager.getLogger(Secretary.class);
-    private ArrayList<String> workList;  
+    private ArrayList<SecretaryWork> workList;  
 
     public Secretary(String firstName, String lastName, int id, String hireDate)
     {
         super(firstName, lastName);
-        this.workList = new ArrayList<String>();
+        this.workList = new ArrayList<SecretaryWork>();
         this.salary = 150.00;
         this.id = id;
         this.dateOfHire = hireDate;
     }
 
 
-    public void addWork(String workInfo)
+    public void addWork(SecretaryWork work)
     {
-        this.workList.add(workInfo);
+        this.workList.add(work);
     }
 
-    public void removeWork(String workInfo)
+    public void removeWork(SecretaryWork workToRemove)
     {
-        if (!this.workList.contains(workInfo))
+        if (workList.contains(workToRemove))
         {
-            System.out.println(workInfo + " is not in the specified work list.");
+            LOGGER.info("Removing work " + workToRemove.getType());
+            workList.remove(workToRemove);
         }
+
         else
         {
-            this.workList.remove(workInfo);
+            LOGGER.info("Work " + workToRemove.getType() + " is not in the specified work list.");
         }
+
     }
 
-    public ArrayList<String> getWorkList()
+    public ArrayList<SecretaryWork> getWorkList()
     {
         return this.workList;
     }
 
-    public void setWorkList(ArrayList<String> newList)
+    public void setWorkList(ArrayList<SecretaryWork> newList)
     {
         this.workList = newList;
     }
@@ -52,9 +56,9 @@ public class Secretary extends Employee implements CanBeFired
     public String listAllWork()
     {
         String ret = "";
-        for (String work : workList) 
+        for (SecretaryWork work : workList) 
         {
-            ret = ret.concat(work.toString() + "\n");
+            ret = ret.concat(work.getType() + "\n");
         }
 
         return ret;

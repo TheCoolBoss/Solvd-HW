@@ -1,10 +1,10 @@
 package com.solvd.hw;
 
 import java.util.ArrayList;
-
+import java.util.function.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import com.solvd.hw.enums.LicenseType;
 import com.solvd.hw.exceptions.*;
 import com.solvd.hw.interfaces.*;
 
@@ -12,12 +12,14 @@ public class LawFirm implements CanBeShutDown
 {
     private static final Logger LOGGER = LogManager.getLogger(LawFirm.class);
     private static final String COUNTRY = "USA";
+
     protected String name; 
     protected ArrayList<Lawyer> lawyers;
     protected ArrayList<Secretary> secretaries;
     protected ArrayList<Client> clients;
     protected ArrayList<Case> cases;
     protected LinkedList<LawFirm> subsidiaries;
+    boolean isOpen;
 
     static
     {
@@ -31,7 +33,8 @@ public class LawFirm implements CanBeShutDown
         this.clients = new ArrayList<Client>();
         this.secretaries = new ArrayList<Secretary>();
         this.cases = new ArrayList<Case>();
-        this.subsidiaries = new LinkedList<LawFirm>(null);
+        this.subsidiaries = new LinkedList<LawFirm>();
+        this.isOpen = true;
     }
 
     public String getName()
@@ -79,7 +82,7 @@ public class LawFirm implements CanBeShutDown
 
     public void addEmployee(Employee employee) throws ClosedLawFirmException
     {
-        if (this.name.contains("closed"))
+        if (!isOpen)
         {
             throw new ClosedLawFirmException(name);
         }
@@ -105,17 +108,51 @@ public class LawFirm implements CanBeShutDown
                 + secretaryList);
     }
 
+    public ArrayList<Lawyer> getLawyersByLicenseType(LicenseType type)
+    {
+        ArrayList<Lawyer> toRet = new ArrayList<Lawyer>();
+        Predicate<Lawyer> pred = (Lawyer current) -> current.getLicense().getType().equals(type);
+        for (Lawyer lawyer : lawyers) 
+        {
+            if (pred.test(lawyer))
+            {
+                toRet.add(lawyer);
+            }
+        }
+
+        return toRet;
+    }
+    
     public void listPlans(int hours)
     {
         LOGGER.info("The costs of a " + hours + " hour plan for all lawyers in " + name + " are:\n");
-        for (Lawyer lawyer: lawyers) 
+
+        if (lawyers.size() == 0)
         {
-            double base = lawyer.getPlan().getBaseCost();
-            double hourRate = lawyer.getPlan().getHourRate();
-            LOGGER.info(lawyer.getFirstName() + " " + lawyer.getLastName() + ":");
-            LOGGER.info("Base rate of " + base + ", plus hourly rate of " + hourRate);
-            double total = (base + (hourRate * hours));
-            LOGGER.info("Total: " + total + "\n");
+            LOGGER.info("No lawyers in law firm " + name);
+        }
+
+        else
+        {
+            for (Lawyer lawyer: lawyers) 
+            {
+                double base = lawyer.getPlan().getBaseCost();
+                double hourRate = lawyer.getPlan().getHourRate();
+                LOGGER.info(lawyer.getFirstName() + " " + lawyer.getLastName() + ":");
+                LOGGER.info("Base rate of " + base + ", plus hourly rate of " + hourRate);
+                double total = (base + (hourRate * hours));
+
+                if (lawyer.getSecretary() != null)
+                {
+                    Secretary secretary = lawyer.getSecretary();
+                    if (secretary.getWorkList().size() > 0)
+                    {
+                        LOGGER.info(secretary.toString() + " has to complete a number of tasks. This may affect waiting times.");
+                    }
+                }
+                
+                LOGGER.info("Total: " + total + "\n");
+            }
         }
     }    
 
@@ -128,7 +165,7 @@ public class LawFirm implements CanBeShutDown
 
         else
         {
-            logger.info("Listing costs for all cases for " + client.getFirstName() + " " + client.getLastName() + ":\n");
+            logger.info("Listing costs for all cases for client " + client.getFirstName() + " " + client.getLastName() + ":\n");
             ArrayList<Integer> caseDurations = new ArrayList<Integer>();
 
             for (Case c : client.getCases())
@@ -150,6 +187,7 @@ public class LawFirm implements CanBeShutDown
     {
         LOGGER.info("Law firm " + name + " is being shut down by the government.");
 
+        isOpen = false;
         name = name.concat("(Now closed.)");
         clients.clear();
 
