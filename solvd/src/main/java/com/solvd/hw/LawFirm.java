@@ -1,18 +1,23 @@
 package com.solvd.hw;
 
 import java.util.ArrayList;
+import java.util.*;
+import java.util.Comparator;
 import java.util.function.*;
+import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.hw.enums.LicenseType;
 import com.solvd.hw.exceptions.*;
 import com.solvd.hw.interfaces.*;
+import com.solvd.hw.lambdas.*;
 
 public class LawFirm implements CanBeShutDown
 {
     private static final Logger LOGGER = LogManager.getLogger(LawFirm.class);
+    private static final BinaryOperator<String> CONCATER = (String s1, String s2) -> s1.concat(s2);
     private static final String COUNTRY = "USA";
-    
+
     private String name; 
     private ArrayList<Lawyer> lawyers;
     private ArrayList<Secretary> secretaries;
@@ -160,7 +165,7 @@ public class LawFirm implements CanBeShutDown
     {
         if (client.getCases().size() == 0)
         {
-            throw new NoCasesFoundException(client.getFirstName().concat(" " + client.getLastName()));
+            throw new NoCasesFoundException(CONCATER.apply(client.getFirstName(), " " + client.getLastName()));
         }
 
         else
@@ -183,12 +188,39 @@ public class LawFirm implements CanBeShutDown
         }
     }
 
+    //Adds all cases of this firm to a specified lawyer's case list
+    //Not terribly concerned about doing this for clients since I doubt one client is on every single case at most times
+    public void addCasesToLawyer(Lawyer recipient)
+    {
+        Adder<Case> caseAdder = (ArrayList<Case> caseList, ArrayList<Case> lawyerCases) ->
+        {
+            caseList.addAll(lawyerCases);
+        };
+
+        caseAdder.add(cases, recipient.getCases());
+    }
+
+    public ArrayList<Case> filterPrivateCases()
+    {
+        ArrayList<Case> toRet = new ArrayList<Case>();
+        NameFilter<Case> caseNameFilter = (ArrayList<Case> caseList, String filter) ->
+        {
+            toRet = caseList.stream()
+            .filter((Case c) -> c.getTitle().equals(filter))
+            .collect(Collectors.toList());
+            
+        };
+
+        return toRet;
+    }
+
+
     public void closeDown()
     {
         LOGGER.info("Law firm " + name + " is being shut down by the government.");
 
         isOpen = false;
-        name = name.concat("(Now closed.)");
+        CONCATER.apply(name, " (Now closed)");
         clients.clear();
 
         for (Lawyer lawyer: lawyers) 

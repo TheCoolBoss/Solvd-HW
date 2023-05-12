@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.solvd.hw.enums.SecretaryWork;
 import com.solvd.hw.interfaces.*;
+import com.solvd.hw.lambdas.NameSorter;
 
 public class Secretary extends Employee implements CanBeFired
 {
@@ -69,6 +70,22 @@ public class Secretary extends Employee implements CanBeFired
         }
 
         LOGGER.info(workString);
+    }
+
+    public void sortWork()
+    {
+        NameSorter<SecretaryWork> nameSorter = (ArrayList<SecretaryWork> list) ->
+        {
+            list.sort(new java.util.Comparator<SecretaryWork>() 
+            {
+                public int compare(SecretaryWork work1, SecretaryWork work2)
+                {
+                    return work1.compareTo(work2);
+                }
+            });
+        };
+
+        nameSorter.sort(workList);
     }
 
     public boolean equals(Object toCompare)

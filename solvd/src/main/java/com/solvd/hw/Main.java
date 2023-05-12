@@ -88,6 +88,29 @@ public class Main
                 }
             }
         }
+
+        for (Case case1 : theLaw.getCases()) 
+        {
+            try
+            {
+                theLaw.getLawyers().get(0).addCase(case1);
+            }
+
+            catch (InvalidLicenseException ile)
+            {
+                LOGGER.error(ile.getMessage());
+            }
+        }
+
+        try
+        {
+            theLaw.getLawyers().get(0).addCase(new Case("Abc", "1", "1", "2", 4));
+        }
+
+        catch (InvalidLicenseException ile)
+        {
+            LOGGER.error(ile.getMessage());
+        }
     }    
 
 

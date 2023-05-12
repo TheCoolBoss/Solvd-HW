@@ -16,6 +16,7 @@ public abstract class Employee
 
 
     public abstract void printWork();
+    public abstract void sortWork();
 
     //Setters for date of hire and id omitted because they don't seem 100% necessary for this type of system
     public String getFirstName()

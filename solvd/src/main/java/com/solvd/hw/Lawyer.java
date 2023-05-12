@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.function.*;
 import com.solvd.hw.exceptions.*;
 import com.solvd.hw.interfaces.*;
+import com.solvd.hw.lambdas.NameSorter;
 
 public class Lawyer extends Employee implements CanBeFired
 {
@@ -142,5 +143,21 @@ public class Lawyer extends Employee implements CanBeFired
         this.id = -1;
         this.cases.clear();
         this.license.revoke();
+    }
+
+    public void sortWork()
+    {
+        NameSorter<Case> nameSorter = (ArrayList<Case> list) ->
+        {
+            list.sort(new java.util.Comparator<Case>() 
+            {
+                public int compare(Case c1, Case c2)
+                {
+                    return c1.getTitle().compareTo(c2.getTitle());
+                }
+            });
+        };
+
+        nameSorter.sort(cases);
     }
 }
