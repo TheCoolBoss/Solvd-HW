@@ -200,19 +200,19 @@ public class LawFirm implements CanBeShutDown
         caseAdder.add(cases, recipient.getCases());
     }
 
-    public ArrayList<Case> filterPrivateCases()
-    {
-        ArrayList<Case> toRet = new ArrayList<Case>();
-        NameFilter<Case> caseNameFilter = (ArrayList<Case> caseList, String filter) ->
-        {
-            toRet = caseList.stream()
-            .filter((Case c) -> c.getTitle().equals(filter))
-            .collect(Collectors.toList());
+    // public ArrayList<Case> filterPrivateCases()
+    // {
+    //     ArrayList<Case> toRet = new ArrayList<Case>();
+    //     NameFilter<Case> caseNameFilter = (ArrayList<Case> caseList, String filter) ->
+    //     {
+    //         toRet = caseList.stream()
+    //         .filter((Case c) -> c.getTitle().equals(filter))
+    //         .collect(Collectors.toList());
             
-        };
+    //     };
 
-        return toRet;
-    }
+    //     return toRet;
+    // }
 
 
     public void closeDown()
