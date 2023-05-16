@@ -1,59 +1,65 @@
 package com.solvd.hw.reflection;
 
 import java.lang.reflect.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.solvd.hw.LawFirm;
 import com.solvd.hw.enums.Court;
 
 public class ReflectionTest 
 {
+    private static final Logger LOGGER = LogManager.getLogger(ReflectionTest.class);
+
     public static void main(String[] args)
     {
         try 
         {
             Class<?> test = Class.forName("com.solvd.hw.LawFirm");
-            Constructor<?>[] consts = test.getDeclaredConstructors();
-            Method[] methods = test.getDeclaredMethods();
-            System.out.println("Name " + test.getName());
+            Class<?>[] params = {String.class, Court.class};
 
-            for (Constructor<?> constructor : consts) 
-            {
-                System.out.println("Constructor " + constructor);
-                System.out.println(constructor.getParameterTypes());
-            }
-            
-            for (Method method: methods)
-            {
-                System.out.println("Method " + method.getName());
-            }
+            LOGGER.info("Name " + test.getName());
 
+            //Should probably change this to make constructor some hard coded one on exception, but focusing on other stuff right now
             try
             {
-                LawFirm firmReflect = (LawFirm) consts[0].newInstance("Reflection Firm", Court.FEDERAL);
-                for (Method method : methods) 
+                Constructor<?> constructor = test.getDeclaredConstructor(params);
+                Method[] methods = test.getDeclaredMethods();
+    
+                LOGGER.info("Constructor " + constructor);
+                
+                for (Method method: methods)
                 {
-                    if (method.getName().equals("toString"))
+                    LOGGER.info("Method " + method.getName());
+                }
+    
+                try
+                {
+                    LawFirm firmReflect = (LawFirm) constructor.newInstance("Reflection Firm", Court.FEDERAL);
+                    for (Method method : methods) 
                     {
-                        System.out.println(method.invoke(firmReflect));
+                        if (method.getName().equals("toString"))
+                        {
+                            LOGGER.info("Calling toString");
+                            LOGGER.info(method.invoke(firmReflect));
+                        }
                     }
+                }
+    
+                catch (Exception e)
+                {
+                    LOGGER.info(e.getMessage());
                 }
             }
 
-            catch (Exception e)
+            catch (NoSuchMethodException nsme)
             {
-                System.out.println(e.getMessage());
-            }
-
-
-            
+                LOGGER.error("Constructor not found :(");
+            }           
         } 
         
         catch (ClassNotFoundException cnfe) 
         {
-            System.out.println(cnfe.getMessage());
+            LOGGER.info(cnfe.getMessage());
         }
-
-
     }
-
-
 }
