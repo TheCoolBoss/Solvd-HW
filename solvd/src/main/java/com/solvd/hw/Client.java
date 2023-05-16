@@ -1,9 +1,14 @@
 package com.solvd.hw;
 
 import java.util.ArrayList;
+import java.util.Optional;
+
+import com.solvd.hw.lambdas.Sorters;
+import com.solvd.old.Sorter;
 
 public class Client 
 {
+    private static final Sorters SORTER_LAMBDAS = new Sorters();
     private static final String DEFAULT_FIRST_NAME = "John";
     private static final String DEFAULT_LAST_NAME = "Doe";
     private String firstName;
@@ -38,6 +43,11 @@ public class Client
         return this.cases;
     }
 
+    public String getFullName()
+    {
+        return getFirstName() + " " + getLastName();
+    }
+
     public void setFirstName(String newFirstName)
     {
         this.firstName = newFirstName;
@@ -61,5 +71,30 @@ public class Client
     public void removeCase(Case caseToRemove)
     {
         this.cases.remove(caseToRemove);
+    }
+
+    //Couldn't figure out how to use min since getTotalCostsOfCases uses a param
+    //i.e. don't know how to pass dynamic param in a comparator
+    public Lawyer getCheapestLawyer(ArrayList<Lawyer> lawyerList)
+    {
+        double bestCost = lawyerList.get(0).getTotalCostsOfCases(this.cases);
+        int index = 0;
+
+        for (int i = 1; i < lawyerList.size(); i++)
+        {
+            double currCost = lawyerList.get(i).getTotalCostsOfCases(this.cases);
+            if (currCost < bestCost)
+            {
+                bestCost = currCost;
+                index = i;
+            }
+        }
+
+        return lawyerList.get(index);
+    }
+
+    public Optional<Lawyer> getFastestLawyer(ArrayList<Lawyer> lawyerList)
+    {
+        return lawyerList.stream().min(SORTER_LAMBDAS.leastBusyLawyer);
     }
 }

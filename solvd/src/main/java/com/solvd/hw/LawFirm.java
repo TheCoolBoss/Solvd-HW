@@ -8,13 +8,12 @@ import org.apache.logging.log4j.Logger;
 import com.solvd.hw.enums.Court;
 import com.solvd.hw.exceptions.*;
 import com.solvd.hw.interfaces.*;
-import com.solvd.hw.lambdas.Adders;
+import com.solvd.hw.lambdas.interfaces.IAdder;
 import com.solvd.hw.lambdas.interfaces.IFilter;
 
 public class LawFirm implements CanBeShutDown
 {
     private static final Logger LOGGER = LogManager.getLogger(LawFirm.class);
-    private static final Adders ADDER_LAMBDAS = new Adders();
     private static final BinaryOperator<String> CONCATER = (String s1, String s2) -> s1.concat(s2);
     private static final String COUNTRY = "USA";
 
@@ -125,7 +124,24 @@ public class LawFirm implements CanBeShutDown
         return (ArrayList<Lawyer>) this.lawyers.stream().filter(condition).collect(Collectors.toList());
     }
     
-    public void listPlans(int hours)
+    //Adds specified cases of this firm to a specified lawyer's case list
+    public void addCasesToLawyer(ArrayList<Case> caseList, Lawyer recipient, IAdder<Case> adder)
+    {
+        adder.add(caseList, recipient.getCases());
+    }
+
+    public void addCasesToClient(ArrayList<Case> caseList, Client recipient, IAdder<Case> adder)
+    {
+        adder.add(caseList, recipient.getCases());
+    }
+
+    public ArrayList<Case> filterCasesByName(IFilter<Case> nameFilter)
+    {
+        return nameFilter.filter(cases);
+    }
+
+
+    public void getCosts(int hours)
     {
         LOGGER.info("The costs of a " + hours + " hour plan for all lawyers in " + name + " are:\n");
 
@@ -136,7 +152,7 @@ public class LawFirm implements CanBeShutDown
 
         else
         {
-            lawyers.stream().forEach(lawyer ->
+            lawyers.forEach(lawyer ->
             {
                 double base = lawyer.getPlan().getBaseCost();
                 double hourRate = lawyer.getPlan().getHourRate();
@@ -163,45 +179,42 @@ public class LawFirm implements CanBeShutDown
         LOGGER.info(cases.toString());
     }
     
-    public void printCosts(Client client, Logger logger) throws NoCasesFoundException
+    public void printCosts(Client client) throws NoCasesFoundException
     {
         if (client.getCases().size() == 0)
         {
             throw new NoCasesFoundException(CONCATER.apply(client.getFirstName(), " " + client.getLastName()));
         }
 
-        else
+        else if (lawyers.size() > 0)
         {
-            logger.info("Listing costs for all cases for client " + client.getFirstName() + " " + client.getLastName() + ":\n");
+            LOGGER.info("Law firm " + name);
+            LOGGER.info("Listing costs for all cases for client " + client.getFullName() + ":\n");
             ArrayList<Integer> caseDurations = new ArrayList<Integer>();
 
-            client.getCases().stream().forEach(clientCase ->
+            client.getCases().forEach(clientCase ->
             {
                 caseDurations.add(clientCase.getDuration());
             });
 
-            caseDurations.stream().forEach(i ->
+            caseDurations.forEach(i ->
             {
                 int index = caseDurations.indexOf(i);
-                logger.info("Case " + client.getCases().get(index).getTitle() + ":");
-                this.listPlans(i);
-                logger.info("----------------------\n");
+                LOGGER.info("Case " + client.getCases().get(index).getTitle() + ":");
+                this.getCosts(i);
+                LOGGER.info("----------------------\n");
             });
+
+            LOGGER.info("Based on these statistics, the Lawyer with the best cost for all cases of client " + client.getFullName() + " is " + client.getCheapestLawyer(lawyers).toString());
+            LOGGER.info("The lawyer with the least busy schedule is " + client.getFastestLawyer(lawyers).get().toString() +"\n\n");
         }
-    }
 
-    //Adds specified cases of this firm to a specified lawyer's case list
-    //Not terribly concerned about doing this for clients since I doubt one client is on every single case at most times
-    public void addCasesToLawyer(ArrayList<Case> caseList, Lawyer recipient)
-    {
-        ADDER_LAMBDAS.caseAdder.add(caseList, recipient.getCases());
-    }
+        else
+        {
+            LOGGER.info("No lawyers for law firm " + name);
+        }
 
-    public ArrayList<Case> filterCasesByName(IFilter<Case> nameFilter)
-    {
-        return nameFilter.filter(cases);
     }
-
 
     public void closeDown()
     {
@@ -211,8 +224,8 @@ public class LawFirm implements CanBeShutDown
         CONCATER.apply(name, " (Now closed)");
         clients.clear();
 
-        lawyers.stream().forEach(lawyer -> lawyer.fire());
-        secretaries.stream().forEach(secretary -> secretary.fire());
+        lawyers.forEach(lawyer -> lawyer.fire());
+        secretaries.forEach(secretary -> secretary.fire());
         cases.clear();
     }
 }

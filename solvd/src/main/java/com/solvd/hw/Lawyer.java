@@ -75,6 +75,11 @@ public class Lawyer extends Employee implements CanBeFired
         this.cases = newCases;
     }
 
+    public ArrayList<Session> getSessions()
+    {
+        return this.sessions;
+    }
+
     public void addSession(Session toAdd)
     {
         this.sessions.add(toAdd);
@@ -99,6 +104,19 @@ public class Lawyer extends Employee implements CanBeFired
         this.cases.remove(caseToRemove);
     }
     
+    //The param is added in the event cases beyond this lawyer's list want to be included
+    public double getTotalCostsOfCases(ArrayList<Case> cases)
+    {
+        double total = 0.0;
+
+        for (Case c : cases) 
+        {
+            total += this.getPlan().getBaseCost() + (this.getPlan().getHourRate() * c.getDuration());
+        }
+
+        return total;
+    }
+
     public String toString()
     {
         return "Lawyer " + getFirstName() + " " + getLastName();

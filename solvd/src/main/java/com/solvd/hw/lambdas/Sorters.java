@@ -9,7 +9,7 @@ public class Sorters
 {
     public ISorter<Case> caseNameSorter = (ArrayList<Case> list) ->
     {
-        list.sort(new java.util.Comparator<Case>() 
+        list.sort(new Comparator<Case>() 
         {
             public int compare(Case c1, Case c2)
             {
@@ -20,13 +20,21 @@ public class Sorters
 
     public ISorter<SecretaryWork> secretaryWorkSorter = (ArrayList<SecretaryWork> list) ->
     {
-        list.sort(new java.util.Comparator<SecretaryWork>() 
+        list.sort(new Comparator<SecretaryWork>() 
         {
             public int compare(SecretaryWork work1, SecretaryWork work2)
             {
                 return work1.compareTo(work2);
             }
         });
+    };
+
+    public Comparator<Lawyer> leastBusyLawyer = new Comparator<Lawyer>()
+    {
+        public int compare(Lawyer l1, Lawyer l2)
+        {
+            return Integer.valueOf(l1.getSessions().size()).compareTo(Integer.valueOf(l2.getSessions().size()));
+        }
     };
 }
 
