@@ -1,4 +1,4 @@
-package com.solvd.hw;
+package com.solvd.hw.wordcounter;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,15 +11,11 @@ import org.apache.commons.lang3.StringUtils;
 
 public class WordCounter 
 {
+    private static final String PATH = "solvd/src/main/java/com/solvd/hw/wordcounter/words.txt";
     public static void main(String[] args)
     {
         Logger logger = LogManager.getLogger("Main");
-        File toRead = FileUtils.getFile("words.txt");
-
-        if (toRead == null)
-        {
-            toRead = FileUtils.getFile("words.txt");
-        }
+        File toRead = FileUtils.getFile(PATH);
 
         try
         {
@@ -34,9 +30,11 @@ public class WordCounter
                     uniqueWords.add(word);
                 }
             }
+            String toAdd = "Unique words: " + uniqueWords.size() + "\n";
 
-            logger.info("Unique words: " + uniqueWords.size());
-            FileUtils.writeStringToFile(toRead, Integer.toString(uniqueWords.size()), StandardCharsets.UTF_8, true);
+            logger.info(toAdd);
+            FileUtils.writeStringToFile(toRead, toAdd, StandardCharsets.UTF_8, true);
+
         }
 
         catch (IOException ioe)

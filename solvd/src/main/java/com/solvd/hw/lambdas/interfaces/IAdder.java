@@ -1,8 +1,8 @@
-package com.solvd.hw.lambdas;
+package com.solvd.hw.lambdas.interfaces;
 
 import java.util.ArrayList;
 
-public interface Adder <T>
+public interface IAdder <T>
 {
     void add(ArrayList<T> objectsToAdd, ArrayList<T> listToReceive);
 }

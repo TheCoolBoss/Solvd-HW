@@ -1,20 +1,20 @@
 package com.solvd.hw;
 
 import java.util.ArrayList;
-import java.util.*;
-import java.util.Comparator;
 import java.util.function.*;
-import java.util.stream.Stream;
+import java.util.stream.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.solvd.hw.enums.LicenseType;
+import com.solvd.hw.enums.Court;
 import com.solvd.hw.exceptions.*;
 import com.solvd.hw.interfaces.*;
-import com.solvd.hw.lambdas.*;
+import com.solvd.hw.lambdas.Adders;
+import com.solvd.hw.lambdas.interfaces.IFilter;
 
 public class LawFirm implements CanBeShutDown
 {
     private static final Logger LOGGER = LogManager.getLogger(LawFirm.class);
+    private static final Adders ADDER_LAMBDAS = new Adders();
     private static final BinaryOperator<String> CONCATER = (String s1, String s2) -> s1.concat(s2);
     private static final String COUNTRY = "USA";
 
@@ -25,13 +25,14 @@ public class LawFirm implements CanBeShutDown
     private ArrayList<Case> cases;
     private LinkedList<LawFirm> subsidiaries;
     private boolean isOpen;
+    private Court jurisdiction;
 
     static
     {
-        System.out.println("Establishing new law firm in " + COUNTRY + ".");
+        LOGGER.info("Establishing new law firm in " + COUNTRY + ".");
     }
 
-    public LawFirm(String name)
+    public LawFirm(String name, Court jurisdiction)
     {
         this.name = name;
         this.lawyers = new ArrayList<Lawyer>();
@@ -40,6 +41,7 @@ public class LawFirm implements CanBeShutDown
         this.cases = new ArrayList<Case>();
         this.subsidiaries = new LinkedList<LawFirm>();
         this.isOpen = true;
+        this.jurisdiction = jurisdiction;
     }
 
     public String getName()
@@ -57,7 +59,7 @@ public class LawFirm implements CanBeShutDown
         return this.secretaries;
     }
     
-    public LinkedList<LawFirm> getsubsidiaries()
+    public LinkedList<LawFirm> getSubsidiaries()
     {
         return this.subsidiaries;
     }
@@ -70,6 +72,11 @@ public class LawFirm implements CanBeShutDown
     public ArrayList<Case> getCases()
     {
         return this.cases;
+    }
+
+    public String getJurisdiction()
+    {
+        return this.jurisdiction.name();
     }
 
     public void setName(String newName)
@@ -107,25 +114,15 @@ public class LawFirm implements CanBeShutDown
     {
         String lawyerList = lawyers.toString();
         String secretaryList = secretaries.toString();
-        return("Law firm " + this.name + ":\n"
+        return("Law firm of jurisdiction " + jurisdiction + " " + this.name + ":\n"
                 + lawyerList
                 + "\n"
                 + secretaryList);
     }
 
-    public ArrayList<Lawyer> getLawyersByLicenseType(LicenseType type)
+    public ArrayList<Lawyer> getLawyersByLicenseType(Predicate<Lawyer> condition)
     {
-        ArrayList<Lawyer> toRet = new ArrayList<Lawyer>();
-        Predicate<Lawyer> pred = (Lawyer current) -> current.getLicense().getType().equals(type);
-        for (Lawyer lawyer : lawyers) 
-        {
-            if (pred.test(lawyer))
-            {
-                toRet.add(lawyer);
-            }
-        }
-
-        return toRet;
+        return (ArrayList<Lawyer>) this.lawyers.stream().filter(condition).collect(Collectors.toList());
     }
     
     public void listPlans(int hours)
@@ -139,7 +136,7 @@ public class LawFirm implements CanBeShutDown
 
         else
         {
-            for (Lawyer lawyer: lawyers) 
+            lawyers.stream().forEach(lawyer ->
             {
                 double base = lawyer.getPlan().getBaseCost();
                 double hourRate = lawyer.getPlan().getHourRate();
@@ -157,10 +154,15 @@ public class LawFirm implements CanBeShutDown
                 }
                 
                 LOGGER.info("Total: " + total + "\n");
-            }
+            });
         }
     }    
 
+    public void printCases()
+    {
+        LOGGER.info(cases.toString());
+    }
+    
     public void printCosts(Client client, Logger logger) throws NoCasesFoundException
     {
         if (client.getCases().size() == 0)
@@ -173,46 +175,32 @@ public class LawFirm implements CanBeShutDown
             logger.info("Listing costs for all cases for client " + client.getFirstName() + " " + client.getLastName() + ":\n");
             ArrayList<Integer> caseDurations = new ArrayList<Integer>();
 
-            for (Case c : client.getCases())
+            client.getCases().stream().forEach(clientCase ->
             {
-                caseDurations.add(c.getDuration());
-            }
-    
-            for (Integer i : caseDurations)
+                caseDurations.add(clientCase.getDuration());
+            });
+
+            caseDurations.stream().forEach(i ->
             {
                 int index = caseDurations.indexOf(i);
                 logger.info("Case " + client.getCases().get(index).getTitle() + ":");
                 this.listPlans(i);
                 logger.info("----------------------\n");
-            }
+            });
         }
     }
 
-    //Adds all cases of this firm to a specified lawyer's case list
+    //Adds specified cases of this firm to a specified lawyer's case list
     //Not terribly concerned about doing this for clients since I doubt one client is on every single case at most times
-    public void addCasesToLawyer(Lawyer recipient)
+    public void addCasesToLawyer(ArrayList<Case> caseList, Lawyer recipient)
     {
-        Adder<Case> caseAdder = (ArrayList<Case> caseList, ArrayList<Case> lawyerCases) ->
-        {
-            caseList.addAll(lawyerCases);
-        };
-
-        caseAdder.add(cases, recipient.getCases());
+        ADDER_LAMBDAS.caseAdder.add(caseList, recipient.getCases());
     }
 
-    // public ArrayList<Case> filterPrivateCases()
-    // {
-    //     ArrayList<Case> toRet = new ArrayList<Case>();
-    //     NameFilter<Case> caseNameFilter = (ArrayList<Case> caseList, String filter) ->
-    //     {
-    //         toRet = caseList.stream()
-    //         .filter((Case c) -> c.getTitle().equals(filter))
-    //         .collect(Collectors.toList());
-            
-    //     };
-
-    //     return toRet;
-    // }
+    public ArrayList<Case> filterCasesByName(IFilter<Case> nameFilter)
+    {
+        return nameFilter.filter(cases);
+    }
 
 
     public void closeDown()
@@ -223,16 +211,8 @@ public class LawFirm implements CanBeShutDown
         CONCATER.apply(name, " (Now closed)");
         clients.clear();
 
-        for (Lawyer lawyer: lawyers) 
-        {
-            lawyer.fire();
-        }
-
-        for (Secretary secretary : secretaries)
-        {
-            secretary.fire();
-        }
-
+        lawyers.stream().forEach(lawyer -> lawyer.fire());
+        secretaries.stream().forEach(secretary -> secretary.fire());
         cases.clear();
     }
 }

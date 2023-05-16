@@ -1,17 +1,20 @@
 package com.solvd.hw;
 
 import java.util.ArrayList;
-
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import com.solvd.hw.enums.SecretaryWork;
 import com.solvd.hw.interfaces.*;
-import com.solvd.hw.lambdas.NameSorter;
+import com.solvd.hw.lambdas.Sorters;
 
 public class Secretary extends Employee implements CanBeFired
 {
+    private static final BinaryOperator<String> CONCATER = (String s1, String s2) -> s1.concat(s2);
     private static final Logger LOGGER = LogManager.getLogger(Secretary.class);
+    private static final Function<String, String> NEW_LINE_ADDER = (String caseString) -> caseString.concat("\n");
+    private static final Sorters LAMBD_SORTERS = new Sorters();
     private ArrayList<SecretaryWork> workList;  
 
     public Secretary(String firstName, String lastName, int id, String hireDate)
@@ -33,13 +36,13 @@ public class Secretary extends Employee implements CanBeFired
     {
         if (workList.contains(workToRemove))
         {
-            LOGGER.info("Removing work " + workToRemove.getType());
+            LOGGER.info("Removing work " + workToRemove.name());
             workList.remove(workToRemove);
         }
 
         else
         {
-            LOGGER.info("Work " + workToRemove.getType() + " is not in the specified work list.");
+            LOGGER.info("Work " + workToRemove.name() + " is not in the specified work list.");
         }
 
     }
@@ -66,7 +69,7 @@ public class Secretary extends Employee implements CanBeFired
         String workString = "";
         for (SecretaryWork work : workList) 
         {
-            workString = workString.concat(work.getType() + "\n");
+            workString = CONCATER.apply(workString, NEW_LINE_ADDER.apply(work.name()));
         }
 
         LOGGER.info(workString);
@@ -74,18 +77,7 @@ public class Secretary extends Employee implements CanBeFired
 
     public void sortWork()
     {
-        NameSorter<SecretaryWork> nameSorter = (ArrayList<SecretaryWork> list) ->
-        {
-            list.sort(new java.util.Comparator<SecretaryWork>() 
-            {
-                public int compare(SecretaryWork work1, SecretaryWork work2)
-                {
-                    return work1.compareTo(work2);
-                }
-            });
-        };
-
-        nameSorter.sort(workList);
+        LAMBD_SORTERS.secretaryWorkSorter.sort(workList);
     }
 
     public boolean equals(Object toCompare)

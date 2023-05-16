@@ -103,19 +103,7 @@ public class Case implements Closable
     //Misc
     public String toString()
     {
-        String toRet = "Case " + title + " of date " + date + " is ";
-        String status = "";
-        if (isOpen)
-        {
-            status = "open.";
-        }
-
-        else
-        {
-            status = "closed.";
-        }
-
-        return CONCATER.apply(toRet, status);
+        return "Case " + title + " of date " + date;
     }
 
     public void close()

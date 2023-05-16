@@ -8,28 +8,9 @@ public class License implements Revokable
     private LicenseType type;
     private boolean isActive;    
 
-    public License(String type)
+    public License(LicenseType type)
     {
-        if (type.equalsIgnoreCase("basic"))
-        {
-            this.type = LicenseType.BASIC;
-        }
-
-        else if (type.equalsIgnoreCase("advanced"))
-        {
-            this.type = LicenseType.ADVANCED;
-        }
-
-        else if (type.equalsIgnoreCase("revoked"))
-        {
-            this.type = LicenseType.REVOKED;
-        }
-
-        else
-        {
-            this.type = LicenseType.OTHER;
-        }
-
+        this.type = type;
         this.isActive = true;
     }
 

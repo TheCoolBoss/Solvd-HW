@@ -1,21 +1,25 @@
 package com.solvd.hw;
 
 import java.util.ArrayList;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.function.*;
+import com.solvd.hw.enums.Session;
 import com.solvd.hw.exceptions.*;
 import com.solvd.hw.interfaces.*;
-import com.solvd.hw.lambdas.NameSorter;
+import com.solvd.hw.lambdas.*;
 
 public class Lawyer extends Employee implements CanBeFired
 {
     private static final Logger LOGGER = LogManager.getLogger(Lawyer.class);
+    private static final Sorters SORTER_LAMBDAS = new Sorters();
+    private final Function<String, String> NEW_LINE_ADDER = (String caseString) -> caseString.concat("\n");
+
     private Plan plan;
     private License license;
     private Secretary secretary;
     private ArrayList<Case> cases;
+    private ArrayList<Session> sessions;
 
     public Lawyer(String firstName, String lastName, Plan plan, License license, Secretary secretary, String hireDate, int id)
     {
@@ -27,6 +31,7 @@ public class Lawyer extends Employee implements CanBeFired
         this.dateOfHire = hireDate;
         this.salary = 200.00;
         this.id = id;
+        this.sessions = new ArrayList<Session>();
     }
 
     
@@ -70,8 +75,16 @@ public class Lawyer extends Employee implements CanBeFired
         this.cases = newCases;
     }
 
+    public void addSession(Session toAdd)
+    {
+        this.sessions.add(toAdd);
+    }
 
-
+    public void removeSession(Session toRem)
+    {
+        this.sessions.remove(toRem);
+    }
+    
     public void addCase(Case caseToAdd) throws InvalidLicenseException
     {
         if (!license.getStatus())
@@ -85,7 +98,7 @@ public class Lawyer extends Employee implements CanBeFired
     {
         this.cases.remove(caseToRemove);
     }
-
+    
     public String toString()
     {
         return "Lawyer " + getFirstName() + " " + getLastName();
@@ -123,11 +136,10 @@ public class Lawyer extends Employee implements CanBeFired
     public void printWork()
     {
         String caseList= "";
-        Function<String, String> addCase = (String caseString) -> caseString.concat("\n");
 
         for (Case c : this.cases) 
         {
-            caseList = caseList.concat(addCase.apply(c.getTitle()));
+            caseList = caseList.concat(NEW_LINE_ADDER.apply(c.getTitle()));
         }
 
         LOGGER.info("List of cases for lawyer " + getFirstName() + " " + getLastName() + ":\n"
@@ -147,17 +159,6 @@ public class Lawyer extends Employee implements CanBeFired
 
     public void sortWork()
     {
-        NameSorter<Case> nameSorter = (ArrayList<Case> list) ->
-        {
-            list.sort(new java.util.Comparator<Case>() 
-            {
-                public int compare(Case c1, Case c2)
-                {
-                    return c1.getTitle().compareTo(c2.getTitle());
-                }
-            });
-        };
-
-        nameSorter.sort(cases);
+        SORTER_LAMBDAS.caseNameSorter.sort(cases);
     }
 }
