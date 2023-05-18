@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import com.solvd.hw.enums.Court;
 import com.solvd.hw.enums.LicenseType;
 import com.solvd.hw.enums.Session;

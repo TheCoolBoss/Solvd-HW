@@ -2,9 +2,7 @@ package com.solvd.hw;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
 import com.solvd.hw.lambdas.Sorters;
-import com.solvd.old.Sorter;
 
 public class Client 
 {
