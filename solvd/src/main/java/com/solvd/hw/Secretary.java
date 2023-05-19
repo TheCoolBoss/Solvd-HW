@@ -14,7 +14,6 @@ public class Secretary extends Employee implements CanBeFired
     private static final BinaryOperator<String> CONCATER = (String s1, String s2) -> s1.concat(s2);
     private static final Logger LOGGER = LogManager.getLogger(Secretary.class);
     private static final Function<String, String> NEW_LINE_ADDER = (String caseString) -> caseString.concat("\n");
-    private static final Sorters LAMBD_SORTERS = new Sorters();
     private ArrayList<SecretaryWork> workList;  
 
     public Secretary(String firstName, String lastName, int id, String hireDate)
@@ -77,7 +76,7 @@ public class Secretary extends Employee implements CanBeFired
 
     public void sortWork()
     {
-        LAMBD_SORTERS.secretaryWorkSorter.sort(workList);
+        Sorters.SECRETARY_WORK_SORTER.sort(workList);
     }
 
     public boolean equals(Object toCompare)

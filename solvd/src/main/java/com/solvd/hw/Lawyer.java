@@ -12,7 +12,6 @@ import com.solvd.hw.lambdas.*;
 public class Lawyer extends Employee implements CanBeFired
 {
     private static final Logger LOGGER = LogManager.getLogger(Lawyer.class);
-    private static final Sorters SORTER_LAMBDAS = new Sorters();
     private final Function<String, String> NEW_LINE_ADDER = (String caseString) -> caseString.concat("\n");
 
     private Plan plan;
@@ -177,6 +176,6 @@ public class Lawyer extends Employee implements CanBeFired
 
     public void sortWork()
     {
-        SORTER_LAMBDAS.caseNameSorter.sort(cases);
+        Sorters.CASE_NAME_SORTER.sort(cases);
     }
 }

@@ -15,7 +15,6 @@ import com.solvd.hw.lambdas.Filters;
 public class Helpers 
 {
     private static final Logger LOGGER = LogManager.getLogger(Helpers.class);
-    private static final Filters FILTER_LAMBDAS = new Filters();
     
     public ArrayList<LawFirm> initLawFirms()
     {
@@ -64,7 +63,7 @@ public class Helpers
 
     public void initRemoteEmployees(LawFirm remoteFirm, LawFirm sourceFirm)
     {
-        ArrayList<Lawyer> remoteLawyers = FILTER_LAMBDAS.remoteLawyerFilter.filter(sourceFirm.getLawyers());
+        ArrayList<Lawyer> remoteLawyers = Filters.REMOTE_LAWYERS.filter(sourceFirm.getLawyers());
         remoteLawyers.stream().forEach((lawyer) -> remoteFirm.getLawyers().add(lawyer));
     }
 

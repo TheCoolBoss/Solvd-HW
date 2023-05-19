@@ -6,7 +6,6 @@ import com.solvd.hw.lambdas.Sorters;
 
 public class Client 
 {
-    private static final Sorters SORTER_LAMBDAS = new Sorters();
     private static final String DEFAULT_FIRST_NAME = "John";
     private static final String DEFAULT_LAST_NAME = "Doe";
     private String firstName;
@@ -93,6 +92,6 @@ public class Client
 
     public Optional<Lawyer> getFastestLawyer(ArrayList<Lawyer> lawyerList)
     {
-        return lawyerList.stream().min(SORTER_LAMBDAS.leastBusyLawyer);
+        return lawyerList.stream().min(Sorters.LEAST_BUSY_LAWYER);
     }
 }

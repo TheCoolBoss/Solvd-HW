@@ -7,7 +7,7 @@ import com.solvd.hw.lambdas.interfaces.ISorter;
 
 public class Sorters
 {
-    public ISorter<Case> caseNameSorter = (ArrayList<Case> list) ->
+    public static final ISorter<Case> CASE_NAME_SORTER = (ArrayList<Case> list) ->
     {
         list.sort(new Comparator<Case>() 
         {
@@ -18,7 +18,7 @@ public class Sorters
         });
     };        
 
-    public ISorter<SecretaryWork> secretaryWorkSorter = (ArrayList<SecretaryWork> list) ->
+    public static final ISorter<SecretaryWork> SECRETARY_WORK_SORTER = (ArrayList<SecretaryWork> list) ->
     {
         list.sort(new Comparator<SecretaryWork>() 
         {
@@ -29,7 +29,7 @@ public class Sorters
         });
     };
 
-    public Comparator<Lawyer> leastBusyLawyer = new Comparator<Lawyer>()
+    public static final Comparator<Lawyer> LEAST_BUSY_LAWYER = new Comparator<Lawyer>()
     {
         public int compare(Lawyer l1, Lawyer l2)
         {

@@ -6,12 +6,12 @@ import com.solvd.hw.lambdas.interfaces.IAdder;
 
 public class Adders 
 {
-    public IAdder<Case> caseAdder = (ArrayList<Case> listToAdd, ArrayList<Case> listToReceive) ->
+    public static final IAdder<Case> CASE_ADDER = (ArrayList<Case> listToAdd, ArrayList<Case> listToReceive) ->
     {
         listToReceive.addAll(listToAdd);
     };
 
-    public IAdder<Lawyer> lawyerAdder = (ArrayList<Lawyer> lawyerList, ArrayList<Lawyer> lawFirmList) ->
+    public static final IAdder<Lawyer> LAWYER_ADDER = (ArrayList<Lawyer> lawyerList, ArrayList<Lawyer> lawFirmList) ->
     {
         lawFirmList.addAll(lawyerList);
     };

@@ -10,7 +10,7 @@ import java.util.function.*;
 public class Filters
 {
     //While it would be better to have a title parameter, the filter method signature is just a list to filter
-    public IFilter<Case> privateCaseFilter = (ArrayList<Case> caseList) ->
+    public static final IFilter<Case> PRIVATE_CASES = (ArrayList<Case> caseList) ->
     {
         return (ArrayList<Case>) caseList.stream()
         .filter((Case c) -> c.getTitle().equals("Private Case"))
@@ -18,24 +18,24 @@ public class Filters
         
     };
 
-    public IFilter<Case> publicCaseFilter = (ArrayList<Case> caseList) ->
+    public static final IFilter<Case> PUBLIC_CASES = (ArrayList<Case> caseList) ->
     {
         return (ArrayList<Case>) caseList.stream()
         .filter((Case c) -> !c.getTitle().equals("Private Case"))
         .collect(Collectors.toList());
     };
     
-    public Predicate<Lawyer> basicLawyers = (Lawyer current) -> current.getLicense().getType().equals(LicenseType.BASIC);
+    public static final Predicate<Lawyer> BASIC_LAWYERS = (Lawyer current) -> current.getLicense().getType().equals(LicenseType.BASIC);
 
 
-    public IFilter<Lawyer> lawyersWithoutCasesFilter = (ArrayList<Lawyer> lawyerList) ->
+    public static final IFilter<Lawyer> LAWYERS_WITHOUT_CASES = (ArrayList<Lawyer> lawyerList) ->
     {
         return (ArrayList<Lawyer>) lawyerList.stream()
         .filter((Lawyer lawyer) -> lawyer.getCases().size() == 0)
         .collect(Collectors.toList());
     };
 
-    public IFilter<Lawyer> remoteLawyerFilter = (ArrayList<Lawyer> lawyers) ->
+    public static final IFilter<Lawyer> REMOTE_LAWYERS = (ArrayList<Lawyer> lawyers) ->
     {
         return (ArrayList<Lawyer>) lawyers.stream()
         .filter((Lawyer lawyer) -> lawyer instanceof LawyerRemote)

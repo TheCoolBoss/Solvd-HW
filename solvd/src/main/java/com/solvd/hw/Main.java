@@ -14,9 +14,6 @@ import java.util.function.*;
 public class Main 
 {
     private static final Logger LOGGER = LogManager.getLogger("Main");
-    private static final Adders ADDER_LAMBDAS = new Adders();
-    private static final Sorters SORTER_LAMBDAS = new Sorters();
-    private static final Filters FILTER_LAMBDAS = new Filters();
     private static final Helpers INIT = new Helpers();
 
     public static void main(String[] args)
@@ -64,7 +61,7 @@ public class Main
 
         theLaw.getSubsidiaries().addNode(customFirm);
         lawFirms.add(customFirm);
-        theLaw.addCasesToLawyer(theLaw.getCases(), customLawyer, ADDER_LAMBDAS.caseAdder);
+        theLaw.addCasesToLawyer(theLaw.getCases(), customLawyer, Adders.CASE_ADDER);
 
         LOGGER.info("Info about all law firms:\n");
         lawFirms.stream().forEach(lawFirm -> LOGGER.info(lawFirm.toString()));
@@ -88,8 +85,8 @@ public class Main
                 {
                     LOGGER.error(ncfe.getMessage());
                     LOGGER.info("Adding public cases from law firm " + theLaw.getName() + " to client.");
-                    LOGGER.info("For reference, they are:\n" + theLaw.filterCasesByName(FILTER_LAMBDAS.publicCaseFilter).toString() +"\n");
-                    theLaw.addCasesToClient(theLaw.filterCasesByName(FILTER_LAMBDAS.publicCaseFilter), client1, ADDER_LAMBDAS.caseAdder);
+                    LOGGER.info("For reference, they are:\n" + theLaw.filterCasesByName(Filters.PUBLIC_CASES).toString() +"\n");
+                    theLaw.addCasesToClient(theLaw.filterCasesByName(Filters.PUBLIC_CASES), client1, Adders.CASE_ADDER);
                 }
             });
 
