@@ -24,5 +24,5 @@ hs_err_pid*
 
 #Folders
 .vscode/*
-target/*
+solvd/target/*
 solvd/target/classes/log4j2.xml
