@@ -18,7 +18,7 @@ public class ExtendedThread extends Thread
         try
         {
             LOGGER.info(toPrint);
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         }
 
         catch (InterruptedException ie)
