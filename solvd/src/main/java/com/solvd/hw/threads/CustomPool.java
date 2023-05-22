@@ -1,61 +1,53 @@
 package com.solvd.hw.threads;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class CustomPool 
 {
-    private ArrayList<Thread> allThreads;
-    private ArrayList<Thread> currThreads;
+    private static final Logger LOGGER = LogManager.getLogger("Pool");
+    private ArrayList<Runnable> allThreads;
+    private ArrayList<Runnable> currThreads;
     private ExecutorService execs = Executors.newFixedThreadPool(MAX_LEN);
     private static final int MAX_LEN = 5;
 
     public CustomPool()
     {
-        this.currThreads = new ArrayList<Thread>();
-        this.allThreads = new ArrayList<Thread>();
+        this.currThreads = new ArrayList<Runnable>();
+        this.allThreads = new ArrayList<Runnable>();
     }
 
-    public void execute()
+    public synchronized Runnable getConn()
     {
-        synchronized(this)
+        if (allThreads.size() == 0)
         {
-            while (this.allThreads.size() != 0)
+            try
             {
-                fillThreads();
-                for (Thread thread : currThreads) 
-                {
-                    execs.execute(thread);
-                }
-                this.currThreads.clear();
+                wait();
             }
 
-            this.execs.shutdown();
+            catch (InterruptedException ie)
+            {
+                LOGGER.error(ie.getMessage());
+            }
+
         }
 
+        return allThreads.remove(0);
     }
+
 
     
-    public void addThread(Thread thread)
+    public void newThread(Runnable thread)
     {
-        this.allThreads.add(thread);
+        thread.run();
     }
 
-    public void fillThreads()
+    public void addThread(Runnable thread)
     {
-         while (this.currThreads.size() < MAX_LEN)
-         {
-            if (this.allThreads.size() != 0)
-            {
-                this.currThreads.add(this.allThreads.get(0));
-                this.allThreads.remove(0);
-            }
-
-            else
-            {
-                break;
-            }
-         }
+        this.allThreads.add(thread);
     }
 }

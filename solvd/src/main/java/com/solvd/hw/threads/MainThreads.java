@@ -1,12 +1,14 @@
 package com.solvd.hw.threads;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.util.concurrent.*;
 
 public class MainThreads 
 {
     private static final Logger LOGGER = LogManager.getLogger("Thread main");
+    private static ExecutorService execs = Executors.newFixedThreadPool(5);
 
     public static void main(String[] args)
     {
@@ -29,14 +31,15 @@ public class MainThreads
         pool.addThread(run5);
         pool.addThread(ext1);
         pool.addThread(ext2);
-        pool.execute();
+
+        for (int i = 0; i < 7; i++) 
+        {
+            execs.execute(pool.getConn());
+        }
+
+        execs.shutdown();
 
         LOGGER.info("Done");
-
-
-
-
-
 
 
         // Future<String> future1 = new FutureVersion().printTest("Show");
