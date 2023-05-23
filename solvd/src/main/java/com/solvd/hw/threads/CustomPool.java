@@ -4,62 +4,77 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class CustomPool
 {
     private static final Logger LOGGER = LogManager.getLogger("Pool");
+    private static ExecutorService execs = Executors.newFixedThreadPool(5);
     private ArrayList<Runnable> allThreads;
+    private ArrayList<Future<String>> allFutures;
 
     public CustomPool()
     {
         this.allThreads = new ArrayList<Runnable>();
+        this.allFutures = new ArrayList<Future<String>>();
     }
 
-    public synchronized Runnable getConn()
+    public Runnable getConn()
     {
         if (allThreads.size() == 0)
         {
             try
             {
-                wait();
+                wait(5000);
             }
 
             catch (InterruptedException ie)
             {
                 LOGGER.error(ie.getMessage());
+                return new RunnableThread(ie.getMessage());
             }
 
         }
 
+
+        //LOGGER.info(execs.submit(allThreads.get(0)).get());
         return allThreads.remove(0);
     }
 
-    public void newThread(Runnable thread)
-    {
-        thread.run();
-    }
+
 
     public void addThread(Runnable thread)
     {
         this.allThreads.add(thread);
     }
 
-    public synchronized void addFuture(String input)
+
+    //Future stuff
+    public String getFuture()
     {
-        String toPrint = "Couldn't get info";
-        Future<String> toAdd = new FutureVersion().printTest(input);
+        String toRet = "Nothing :(";
 
-        try
+        if (allFutures.size() != 0)
         {
-            toPrint = toAdd.get();
+            try
+            {
+                toRet = allFutures.get(0).get();
+                allFutures.remove(0);
+            }
+    
+            catch (InterruptedException | ExecutionException e)
+            {
+                LOGGER.info(e.getMessage());
+            }
         }
 
-        catch (InterruptedException | ExecutionException e)
-        {
-            LOGGER.info(e.getMessage());
-        }
-        
-        LOGGER.info(toPrint);
+        return toRet;
+    }
+
+    public void addFuture(String input)
+    {
+        allFutures.add(new FutureVersion().printTest(input));
     }
 }

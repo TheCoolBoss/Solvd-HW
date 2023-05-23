@@ -37,8 +37,6 @@ public class MainThreads
             execs.execute(pool.getConn());
         }
 
-        execs.shutdown();
-
         LOGGER.info("Done");
 
 
@@ -49,6 +47,12 @@ public class MainThreads
             pool.addFuture(string);
         }
 
+        for (int i = 0; i < 7; i++) 
+        {
+            LOGGER.info(pool.getFuture());
+        }
+
+        execs.shutdown();
         System.exit(0);
     }
 }

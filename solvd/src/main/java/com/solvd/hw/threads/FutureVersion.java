@@ -11,7 +11,7 @@ public class FutureVersion
      {
         return executor.submit(() ->
         {
-            Thread.sleep(500);
+            Thread.sleep(1000);
             return "Printed " + input;
         });
      }
