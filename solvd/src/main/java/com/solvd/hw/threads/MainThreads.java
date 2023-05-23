@@ -42,11 +42,13 @@ public class MainThreads
         LOGGER.info("Done");
 
 
-        // Future<String> future1 = new FutureVersion().printTest("Show");
-        // Future<String> future2 = new FutureVersion().printTest("me");
-        // Future<String> future3 = new FutureVersion().printTest("your");
-        // Future<String> future4 = new FutureVersion().printTest("moves");
-        // Future<String> future5 = new FutureVersion().printTest("!");
+        String[] list = {"Show", "me", "your", "moves", "!", "Come", "on"};
 
+        for (String string : list) 
+        {
+            pool.addFuture(string);
+        }
+
+        System.exit(0);
     }
 }

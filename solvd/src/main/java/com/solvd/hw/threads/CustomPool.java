@@ -3,20 +3,16 @@ package com.solvd.hw.threads;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-public class CustomPool 
+public class CustomPool
 {
     private static final Logger LOGGER = LogManager.getLogger("Pool");
     private ArrayList<Runnable> allThreads;
-    private ArrayList<Runnable> currThreads;
-    private ExecutorService execs = Executors.newFixedThreadPool(MAX_LEN);
-    private static final int MAX_LEN = 5;
 
     public CustomPool()
     {
-        this.currThreads = new ArrayList<Runnable>();
         this.allThreads = new ArrayList<Runnable>();
     }
 
@@ -39,8 +35,6 @@ public class CustomPool
         return allThreads.remove(0);
     }
 
-
-    
     public void newThread(Runnable thread)
     {
         thread.run();
@@ -49,5 +43,23 @@ public class CustomPool
     public void addThread(Runnable thread)
     {
         this.allThreads.add(thread);
+    }
+
+    public synchronized void addFuture(String input)
+    {
+        String toPrint = "Couldn't get info";
+        Future<String> toAdd = new FutureVersion().printTest(input);
+
+        try
+        {
+            toPrint = toAdd.get();
+        }
+
+        catch (InterruptedException | ExecutionException e)
+        {
+            LOGGER.info(e.getMessage());
+        }
+        
+        LOGGER.info(toPrint);
     }
 }
