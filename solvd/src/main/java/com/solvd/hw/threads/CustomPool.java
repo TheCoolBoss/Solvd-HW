@@ -3,78 +3,65 @@ package com.solvd.hw.threads;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-public class CustomPool
+
+public class CustomPool 
 {
-    private static final Logger LOGGER = LogManager.getLogger("Pool");
-    private static ExecutorService execs = Executors.newFixedThreadPool(5);
-    private ArrayList<Runnable> allThreads;
-    private ArrayList<Future<String>> allFutures;
+    private static final int MAX_CONNS = 5;
+    private static final Logger LOGGER = LogManager.getLogger("Connection Pool");
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(MAX_CONNS);
+    public ArrayList<CustomConnection> activeConns;
+    private ArrayList<CustomConnection> idleConns;
+
 
     public CustomPool()
     {
-        this.allThreads = new ArrayList<Runnable>();
-        this.allFutures = new ArrayList<Future<String>>();
+        this.activeConns = new ArrayList<CustomConnection>();
+        this.idleConns = new ArrayList<CustomConnection>();
+        
+        for (int i = 0; i < MAX_CONNS; i++)
+        {
+            this.activeConns.add(new CustomConnection());
+        }
     }
 
-    public Runnable getConn()
+    public synchronized CustomConnection getConn()
     {
-        if (allThreads.size() == 0)
+        if (activeConns.size() == 0)
         {
-            try
-            {
-                wait(5000);
-            }
-
-            catch (InterruptedException ie)
-            {
-                LOGGER.error(ie.getMessage());
-                return new RunnableThread(ie.getMessage());
-            }
-
+            LOGGER.error("No conns to get. :(");
+            return null;
         }
 
-
-        //LOGGER.info(execs.submit(allThreads.get(0)).get());
-        return allThreads.remove(0);
+        CustomConnection temp = activeConns.remove(0);
+        idleConns.add(temp);
+        notifyAll();
+        return temp;
     }
 
-
-
-    public void addThread(Runnable thread)
+    public synchronized void resetConn(CustomConnection conn)
     {
-        this.allThreads.add(thread);
-    }
-
-
-    //Future stuff
-    public String getFuture()
-    {
-        String toRet = "Nothing :(";
-
-        if (allFutures.size() != 0)
+        if (conn == null)
         {
-            try
-            {
-                toRet = allFutures.get(0).get();
-                allFutures.remove(0);
-            }
-    
-            catch (InterruptedException | ExecutionException e)
-            {
-                LOGGER.info(e.getMessage());
-            }
+            LOGGER.error("Null connection :(");
         }
 
-        return toRet;
+        else if (!idleConns.contains(conn))
+        {
+            LOGGER.error("Couldn't find connection. :(");
+        }
+
+        else
+        {
+            idleConns.remove(conn);
+            activeConns.add(conn);
+        }
     }
 
-    public void addFuture(String input)
+    public void addConn(CustomConnection conn)
     {
-        allFutures.add(new FutureVersion().printTest(input));
+        activeConns.add(conn);
     }
 }

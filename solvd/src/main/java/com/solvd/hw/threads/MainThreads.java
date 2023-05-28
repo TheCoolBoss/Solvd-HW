@@ -1,56 +1,82 @@
 package com.solvd.hw.threads;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class MainThreads 
 {
+    //Public so that connection class can reference it
+    public static final String[] WORD_LIST = {"Show", "me", "your", "moves", "!", "Come", "on"};
+    private static final int MAX_CONNS = 5;
     private static final Logger LOGGER = LogManager.getLogger("Thread main");
-    private static ExecutorService execs = Executors.newFixedThreadPool(5);
+    private static ExecutorService execs = Executors.newFixedThreadPool(MAX_CONNS);
 
     public static void main(String[] args)
     {
         CustomPool pool = new CustomPool();
-
-        ExtendedThread run1 = new ExtendedThread("Show");
-        ExtendedThread run2 = new ExtendedThread("me");
-        ExtendedThread run3 = new ExtendedThread("your");
-        ExtendedThread run4 = new ExtendedThread("moves");
-        ExtendedThread run5 = new ExtendedThread("!");
-
-        ExtendedThread ext1 = new ExtendedThread("Come");
-        ExtendedThread ext2 = new ExtendedThread("on");
+        FuturePool futurePool = new FuturePool();
 
 
-        pool.addThread(run1);
-        pool.addThread(run2);
-        pool.addThread(run3);
-        pool.addThread(run4);
-        pool.addThread(run5);
-        pool.addThread(ext1);
-        pool.addThread(ext2);
+        CustomConnection newConn1 = new CustomConnection();
+        CustomConnection newConn2 = new CustomConnection();
 
-        for (int i = 0; i < 7; i++) 
+        pool.addConn(newConn1);
+        pool.addConn(newConn2);
+
+        for (int i = 0; i < MAX_CONNS + 2; i++) 
         {
-            execs.execute(pool.getConn());
+            CustomConnection conn = pool.getConn();
+            execs.execute(conn.thread);
+            pool.resetConn(conn);
+        }
+        
+
+        try
+        {
+            Thread.sleep(2000);
         }
 
-        LOGGER.info("Done");
-
-
-        String[] list = {"Show", "me", "your", "moves", "!", "Come", "on"};
-
-        for (String string : list) 
+        catch (InterruptedException ie)
         {
-            pool.addFuture(string);
+            LOGGER.error(ie.getMessage());
         }
 
-        for (int i = 0; i < 7; i++) 
+
+        //2 new threads to add
+        Future<String> extraFuture1 = new FutureVersion().printTest(WORD_LIST[5]);
+        Future<String> extraFuture2 = new FutureVersion().printTest(WORD_LIST[6]);
+
+        
+        futurePool.addFuture(extraFuture1);
+        futurePool.addFuture(extraFuture2);
+
+        for (int i = 0; i < MAX_CONNS + 2; i++)
         {
-            LOGGER.info(pool.getFuture());
+            try
+            {
+
+                Future<String> future = futurePool.getConn();
+                LOGGER.info(future.get());
+                futurePool.resetConn(future);
+
+            }
+
+            catch (InterruptedException | ExecutionException e)
+            {
+                LOGGER.error(e.getMessage());
+            }
         }
+
+
+
+
+
+
+
 
         execs.shutdown();
         System.exit(0);

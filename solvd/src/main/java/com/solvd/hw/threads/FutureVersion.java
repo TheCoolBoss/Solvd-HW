@@ -7,12 +7,13 @@ import java.util.concurrent.Future;
 public class FutureVersion 
 {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-     public Future<String> printTest(String input)
-     {
-        return executor.submit(() ->
-        {
-            Thread.sleep(1000);
-            return "Printed " + input;
-        });
-     }
+    
+    public Future<String> printTest(String input)
+    {
+    return executor.submit(() ->
+    {
+        Thread.sleep(1000);
+        return "Printed " + input;
+    });
+    }
 }

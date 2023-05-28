@@ -13,8 +13,10 @@ import java.util.function.*;
 
 public class Main 
 {
+
     private static final Logger LOGGER = LogManager.getLogger("Main");
     private static final Helpers INIT = new Helpers();
+    private static Supplier<LawFirm> firmFetcher;
 
     public static void main(String[] args)
     {
@@ -36,9 +38,9 @@ public class Main
 
 
         ArrayList<LawFirm> lawFirms = INIT.initLawFirms();
-        Supplier<LawFirm> firmFetcher = () -> lawFirms.get(0);
-        
+        firmFetcher = () -> lawFirms.get(0);
         LawFirm theLaw = firmFetcher.get();
+
         INIT.initEmployees(theLaw);
         INIT.initCases(theLaw);
         INIT.initClients(theLaw);
@@ -72,7 +74,6 @@ public class Main
 
         while (true)
         {
-
             LOGGER.info("Listing costs for client " + client1.getFirstName() + " " + client1.getLastName());
             lawFirms.forEach(lawFirm -> 
             {
